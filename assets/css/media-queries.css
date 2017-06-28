@@ -1,0 +1,58 @@
+/* Código geral, que será herdado por qualquer dispositivos.
+   nesse caso, seria o código usado no desktop, na maioria das   vezes. 
+   Se você já conhecer a ideia do Mobile First, esse primeiro código será destinado para mobiles.
+*/
+@media screen and (max-width: 768px) {
+	/*********** ALL ****************/
+	input{
+		border-radius: 4px !important;
+	}
+
+	/*********** INDEX ************/
+	.index-body{
+		padding: 0 15px;
+	}
+
+	.index-box{
+		position: relative;
+	}
+
+	.navbar-toggle ,
+	.navbar-toggle:hover ,
+	.navbar-toggle:focus{
+		border: none !important;
+		background: none !important;
+	}
+
+	.icon-bar{
+		background-color: #fff !important;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a ,
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover ,
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:focus ,
+	.dropdown-header{
+	    color: #fff;
+	}
+}
+ 
+/* 
+ Pra dispositivos que tem uma largura mínima de 768 pixels. Tablets, por exemplo.
+*/
+@media screen and (min-width: 768px) {
+	
+}
+ 
+/* 
+ Com uma largura mínima de 992 pixels. Monitores por exemplo.
+*/
+@media screen and (min-width: 992px) {
+  	
+}
+ 
+/* 
+ Dispositivos com largura mínima de 1200 pixels. Por exemplo TVs.
+*/
+@media screen and (min-width: 1200px) {
+  
+}

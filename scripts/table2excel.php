@@ -1,0 +1,1 @@
+<script type="text/javascript" src="plugins/table2excel/dist/jquery.table2excel.min.js"></script>

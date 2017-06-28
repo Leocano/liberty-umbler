@@ -1,0 +1,1 @@
+<script type="text/javascript" src="plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
