@@ -72,6 +72,10 @@ require 'scripts/datatable.php';
 <script type="text/javascript" src="plugins/export/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
 <script type="text/javascript" src="plugins/export/tableExport.min.js"></script>
 
+<div class="back-to-top">
+	<a href="#top"><i class="fa fa-2x fa-arrow-circle-up"></i></a>
+</div>
+
 <div class="row">
 	<div class="col-xs-12 col-sm-4 title">
 		<h1><?=$report_info[0]->name_report?></h1>

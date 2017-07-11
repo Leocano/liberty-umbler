@@ -322,3 +322,21 @@ button.btn {
 .date-disabled {
 	background-color: #eee !important;
 }
+
+.back-to-top {
+	position: fixed;
+	z-index: 9999;
+	bottom: 20px;
+	right: 20px;
+	background: purple;
+	border-radius: 50%;
+	text-align: center;
+}
+
+.back-to-top > a {
+	color: #fff;
+	display: block;
+	width: 50px;
+	height: 50px;
+	padding-top: 10px;
+}
