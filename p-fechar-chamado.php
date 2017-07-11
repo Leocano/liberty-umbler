@@ -23,7 +23,7 @@ $dao->changeStatus($id, $status);
 $sent_mail = $dao->getSentMail($id);
 
 if ($sent_mail[0]->sent_mail == 0){
-	include 'mail/mail-fechar-chamado.php';
+	// include 'mail/mail-fechar-chamado.php';
 }
 
 $dao->emailSent($id);

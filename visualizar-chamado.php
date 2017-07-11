@@ -44,6 +44,9 @@ $email = $ticket[0]->email;
 $proposal = $ticket[0]->id_proposal;
 $new_id_status = $ticket[0]->id_status;
 $external_number = $ticket[0]->external_number;
+$id_category = $ticket[0]->id_category;
+
+var_dump($id_category);
 
 
 //Calculo de tempo total
@@ -157,7 +160,8 @@ $timekeeping = $dao->getTimekeepingByTicketId($id_ticket);
 						</div>
 						<div class="col-xs-12">
 							<?php 
-									if ($solutionText == null || $solution_attachments == null || $timekeeping == null){
+									$allowed_categories = array(1, 2, 4, 8);
+									if ((($solutionText == null || $solution_attachments == null) && !in_array($id_category, $allowed_categories) ) || $timekeeping == null){
 										$no_close = "disabled";
 										echo "<p class='help-block'>Para encerrar o chamado é necessário apontar, preencher a descrição da solução e anexar a documentação</p>";
 									} else {
