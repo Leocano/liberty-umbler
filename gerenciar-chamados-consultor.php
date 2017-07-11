@@ -19,7 +19,9 @@ require 'scripts/datatable.php';
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#my-tickets">Meus Chamados</a></li>
 			<?php 
-				if ($user->checkProfile(array(2,3))){
+				$user_dao = new UserDAO;
+				$id_area = $user_dao->getUserAreaId($id_user);
+				if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 2){
 			?>
 			<li><a data-toggle="tab" href="#all-tickets">Todos os Chamados</a></li>
 			<?php 
@@ -122,8 +124,9 @@ require 'scripts/datatable.php';
 	</div>
 
 <?php 
-
-	if ($user->checkProfile(array(2, 3))){
+	$dao = new UserDAO;
+	$id_area = $dao->getUserAreaId($id_user);
+	if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 2){
 
 		$dao = new TicketDAO;
 		$tickets = $dao->getAllOpenTickets();

@@ -657,6 +657,7 @@ class TicketDAO{
 					,	tb_category		cate
 					,	tb_status		stat
 					,	tb_companies	comp
+					,	tb_proposal		prop
 					WHERE
 						tick.id_creator = user.id_user
 					AND
@@ -669,6 +670,8 @@ class TicketDAO{
 						tick.id_status = stat.id_status
 					AND 
 						user.id_company = comp.id_company
+					AND
+						prop.id_proposal = tick.id_proposal
 					AND
 						(
 							tick.id_ticket LIKE ?
@@ -692,12 +695,15 @@ class TicketDAO{
 							tick.cost_center LIKE ?
 							OR
 							tick.name_creator_ticket LIKE ?
+							OR
+							prop.name_proposal LIKE ?
 						)
 					ORDER BY
 						id_ticket DESC"
 					,
 					array(
 						"%$search%"
+					,	"%$search%"
 					,	"%$search%"
 					,	"%$search%"
 					,	"%$search%"

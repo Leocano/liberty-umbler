@@ -22,6 +22,16 @@ $columns = implode("','", $columns);
 $dao = new ColumnsDAO;
 $columns = $dao->getNicknames($columns);
 
+$date_column_cont = 0;
+$date_column = 0;
+
+foreach($columns as $col) {
+	if (strpos($col->nickname_column, 'Data ') !== false) {
+		$date_column = $date_column_cont;
+	}
+	$date_column_cont++;
+}
+
 $results = $report->getResults();
 
 //Agrupamento
@@ -213,6 +223,7 @@ require 'scripts/datatable.php';
 			?>
 			var groupRow = <?=$col_to_group?>;
 			var hourPos = <?=$hour_pos?>;
+			var dateColumn = <?=$date_column?>;
 
 			var table = $('#data-table').DataTable({
 				// "colReorder" : true ,
@@ -227,7 +238,7 @@ require 'scripts/datatable.php';
 		        "language": {
 		            "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json"
 		        },
-		        "order": [[ groupRow, 'asc' ]],
+		        "order": [[ groupRow, 'asc' ], [dateColumn, 'asc']],
 		        "displayLength": 200,
 		        "lengthMenu" : [ 10, 25, 50, 75, 100, 200],
 		        "drawCallback": function ( settings ) {
@@ -302,6 +313,7 @@ require 'scripts/datatable.php';
 		} else if($sum === null && $grouping !== null) {
 			?>
 			var groupRow = <?=$col_to_group?>;
+			var dateColumn = <?=$date_column?>;
 
 			var table = $('#data-table').DataTable({
 				"colReorder" : true ,
@@ -312,7 +324,7 @@ require 'scripts/datatable.php';
 		        "language": {
 		            "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json"
 		        },
-		        "order": [[ groupRow, 'asc' ]],
+		        "order": [[ groupRow, 'asc' ], [dateColumn, 'asc']],
 		        "displayLength": 200,
 		        "lengthMenu" : [ 10, 25, 50, 75, 100, 200],
 		        "drawCallback": function ( settings ) {

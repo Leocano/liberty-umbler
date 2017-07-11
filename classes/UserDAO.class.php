@@ -72,4 +72,25 @@ class UserDAO{
 
 		return $db->getResults();
 	}
+
+	public function getUserAreaId($id_user) {
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+			SELECT
+				user.area_user
+			FROM
+				tb_users 	user
+			WHERE
+				id_user = ?
+			"
+			,
+			array(
+				$id_user
+			)
+		);
+
+		return $db->getResults();
+	}
 }

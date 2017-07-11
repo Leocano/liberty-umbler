@@ -195,7 +195,7 @@ $id_user = $user->getIdUser();
 			</div>
 			<div class="col-xs-12 col-sm-4 form-group">
 				<label>Valor</label>
-				<input type="text" class="form-control txt-parameter">
+				<input type="text" class="form-control txt-parameter" />
 			</div>
 			<div class="col-xs-12 col-sm-4 form-group">
 				<select class="form-control slt-connector">
