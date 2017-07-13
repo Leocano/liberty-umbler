@@ -292,7 +292,6 @@ $id_user = $user->getIdUser();
 
 ?>
 <script>
-
 	$(document).ready(function(){
 
 		function thisMonth(){
@@ -445,6 +444,39 @@ $id_user = $user->getIdUser();
 			});
 		});
 
+		$divFilter.on("change", ".slt-condition", function(event) {
+			$index = $(this).data("counter");
+			$.ajax({
+				type: 'post',
+				url: 'p-dynamic-columns.php',
+				data: {
+					column: $(this).val()
+				},
+				success: function(response) {
+					response = JSON.parse(response);
+					$(".param-"+$index).selectpicker('destroy');
+					if (response !== "null") {
+						$options = "";
+						response.forEach(function(value) {
+							$options = $options + "<option value='" + value + "'>" + value + "</option>"
+						});
+						$("#txt-parameter-" + $index).replaceWith(`
+							<select class="form-control txt-parameter selectpicker param-`+$index+`" data-live-search="true" id="txt-parameter-` + $index + `" name="txt-parameter[]" >
+								` +
+								$options
+								+ `
+							</select>
+						`);
+						$(".selectpicker").selectpicker();
+					} else {
+						$("#txt-parameter-" + $index).replaceWith(`
+							<input type="text" class="form-control txt-parameter" id="txt-parameter-` + $index + `" name="txt-parameter[]">
+						`);
+					}
+				}
+			})
+		});
+
 		$btnAddFilter.click(function(event){
 			event.preventDefault();
 			$newFilter = $divFilterContent.clone();
@@ -452,6 +484,7 @@ $id_user = $user->getIdUser();
 			$newFilter.attr("data-delete" , index);
 			$newFilter.find(".slt-condition").attr("id" , "slt-condition-" + index);
 			$newFilter.find(".slt-condition").attr("name" , "slt-condition[]");
+			$newFilter.find(".slt-condition").attr("data-counter" , index);
 			$newFilter.find(".slt-criteria").attr("id" , "slt-criteria-" + index);
 			$newFilter.find(".slt-criteria").attr("name" , "slt-criteria[]");
 			$newFilter.find(".txt-parameter").attr("id" , "txt-parameter-" + index);

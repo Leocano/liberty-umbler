@@ -40,9 +40,6 @@ if (isset($_POST['txt-parameter'])){
 if (isset($_POST['check-group'])){
 	$grouping = $_POST['slt-group'];
 
-	// var_dump($grouping);
-	// var_dump($fields);
-
 	if (!in_array($grouping, $fields)){
 		echo "group";
 		exit();

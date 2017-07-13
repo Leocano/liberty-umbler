@@ -181,7 +181,7 @@ $last_month = array(
 
 	<div class="row" id="div-filter">
 		<div class="col-xs-12 col-sm-4 form-group">
-			<label>Campo</label>
+			<label>Data</label>
 			<select class="form-control slt-date" id="slt-date" name="slt-date">
 				<?php 
 				foreach ($date_columns as $column) {
@@ -252,7 +252,12 @@ $last_month = array(
 		</div>	
 		<?php 
 		}
-		?>
+?>
+
+		<div class="col-xs-12 form-group">
+			<hr>
+		</div>
+
 		<div class="col-xs-12 form-group">
 			<button class="btn btn-success" id="btn-add-filter">
 				<i class="fa fa-plus"></i> &nbsp;
@@ -322,12 +327,13 @@ $last_month = array(
 					<div class="div-filter-content" id="div-filter-content-<?=$i?>" data-delete="<?=$i?>">
 						<div class="col-xs-12 col-sm-4 form-group">
 							<label>Nome da coluna</label>
-							<select class="form-control slt-condition" id="slt-condition-<?=$i?>" name="slt-condition[]">
+							<select class="form-control slt-condition" id="slt-condition-<?=$i?>" name="slt-condition[]" data-counter="<?=$i?>">
 								<?php 
 								foreach ($columns as $column) {
 									$selected = "";
 									if ($filter_attr[0] == $column->name_table . '.' . $column->name_column){
 										$selected = "selected";
+										$selected_column = $column->name_column;
 									}
 									?>
 									<option value="<?=$column->name_table . '.' . $column->name_column?>" <?=$selected?> ><?=htmlentities($column->nickname_column)?></option>
@@ -354,7 +360,56 @@ $last_month = array(
 						</div>
 						<div class="col-xs-12 col-sm-4 form-group">
 							<label>Valor</label>
-							<input type="text" class="form-control txt-parameter" id="txt-parameter-<?=$i?>" name="txt-parameter[]" value="<?=$filter_attr[2]?>">
+							<?php
+								$column_name = $selected_column;
+
+								$db = Database::getInstance();
+
+								$db->query(
+									"
+									SELECT
+										query_column
+									FROM
+										tb_report_columns
+									WHERE
+										name_column = ?
+									",
+									array($column_name)
+								);
+
+								$query_column = $db->getResults();
+
+								if ($query_column[0]->query_column == null) {
+								?>
+									<input type="text" class="form-control txt-parameter" id="txt-parameter-<?=$i?>" name="txt-parameter[]" value="<?=$filter_attr[2]?>">
+								<?php
+								} else {
+									$db->query($query_column[0]->query_column);
+									$query_values = $db->getResults();
+									if ($user->checkProfile(array(1)) && $i == 1){
+										$disabled_consultant = "disabled";
+									} else {
+										$disabled_consultant = "";
+									}
+									?>
+										<select <?=$disabled_consultant?> class="form-control txt-parameter selectpicker param-<?=$i?>" data-live-search="true" id="txt-parameter-<?=$i?>" name="txt-parameter[]" >
+											<?php 
+											foreach($query_values as $val) {
+												$selected = "";
+												if ($filter_attr[2] == $val->$column_name) {
+													$selected = "selected";
+												} else {
+													$selected = "";
+												}
+												?>
+												<option <?=$selected?> value="<?=$val->$column_name?>"><?=$val->$column_name?></option>
+												<?php
+											}
+											?>
+										</select>
+									<?php
+								}
+							?>
 						</div>
 						<div class="col-xs-12 col-sm-4 form-group">
 							<select class="form-control slt-connector" id="slt-connector-<?=$i?>" name="slt-connector[]">
@@ -575,6 +630,8 @@ $(document).ready(function(){
 			$("#slt-condition-1").removeAttr("disabled");
 			$("#slt-criteria-1").removeAttr("disabled");
 			$("#slt-connector-1").removeAttr("disabled");
+			$("#txt-parameter-1").removeAttr("disabled");
+			$(".selectpicker").selectpicker("refresh");
 			$("#slt-view").removeAttr("disabled");
 		<?php 
 		}
@@ -677,6 +734,39 @@ $(document).ready(function(){
 			$(this).remove();
 		});
 	});
+	
+	$divFilter.on("change", ".slt-condition", function(event) {
+			$index = $(this).data("counter");
+			$.ajax({
+				type: 'post',
+				url: 'p-dynamic-columns.php',
+				data: {
+					column: $(this).val()
+				},
+				success: function(response) {
+					response = JSON.parse(response);
+					$(".param-"+$index).selectpicker('destroy');
+					if (response !== "null") {
+						$options = "";
+						response.forEach(function(value) {
+							$options = $options + "<option value='" + value + "'>" + value + "</option>"
+						});
+						$("#txt-parameter-" + $index).replaceWith(`
+							<select class="form-control txt-parameter selectpicker param-`+$index+`" data-live-search="true" id="txt-parameter-` + $index + `" name="txt-parameter[]" >
+								` +
+								$options
+								+ `
+							</select>
+						`);
+						$(".selectpicker").selectpicker();
+					} else {
+						$("#txt-parameter-" + $index).replaceWith(`
+							<input type="text" class="form-control txt-parameter" id="txt-parameter-` + $index + `" name="txt-parameter[]">
+						`);
+					}
+				}
+			})
+		});
 
 	$btnAddFilter.click(function(event){
 		event.preventDefault();
@@ -687,6 +777,7 @@ $(document).ready(function(){
 		$newFilter.find(".slt-condition").attr("name" , "slt-condition[]");
 		$newFilter.find(".slt-criteria").attr("id" , "slt-criteria-" + index);
 		$newFilter.find(".slt-criteria").attr("name" , "slt-criteria[]");
+		$newFilter.find(".slt-condition").attr("data-counter" , index);
 		$newFilter.find(".txt-parameter").attr("id" , "txt-parameter-" + index);
 		$newFilter.find(".txt-parameter").attr("name" , "txt-parameter[]");
 		$newFilter.find(".slt-connector").attr("id" , "slt-connector-" + index);
