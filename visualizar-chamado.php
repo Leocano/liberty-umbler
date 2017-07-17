@@ -210,12 +210,18 @@ $timekeeping = $dao->getTimekeepingByTicketId($id_ticket);
 									&nbsp;Apontar Horas
 								</button>
 								<?php 
-								if ($user->checkProfile(array(3, 2))){
-									?>
+								$new_dao = new UserDAO;
+								$area_id = $new_dao->getUserAreaId($id_user);
+								if ($user->checkProfile(array(3, 2)) || $area_id[0]->area_user == 2){
+									if ($user->checkProfile(array(3, 2))){
+								?>
 								<a href="editar-chamado.php?id=<?=$id_ticket?>&token=<?=$_SESSION['token']?>" class="btn btn-default <?=$ticket[0]->disabled?>">
 									<i class="fa fa-pencil"></i>
 									&nbsp;Editar
 								</a>
+								<?php
+								}
+								?>
 								<button class="btn btn-default <?=$ticket[0]->disabled?>" <?=$no_assign?> <?=$ticket[0]->disabled?> data-toggle="modal" data-target="#modal-atribute">
 									<i class="fa fa-user-plus"></i>
 									&nbsp;Atribuir
