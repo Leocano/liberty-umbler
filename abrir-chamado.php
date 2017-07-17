@@ -174,6 +174,7 @@ tinymce.init({
 
 $("#btn-submit").click(function(event){
 	event.preventDefault();
+	$(this).attr("disabled", "disabled");
 	tinymce.activeEditor.uploadImages(function(success) {
 		tinyMCE.get("txt-desc").save();
 	  	$("#form-abrir-chamado").ajaxSubmit({
@@ -184,6 +185,7 @@ $("#btn-submit").click(function(event){
 	  			// alert(json_status);
 	  			if (status[0] == "success"){
 	  				location.href = "visualizar-chamado.php?id=" + status[1] + "&token=" + status[2];
+					$("#btn-submit").removeAttr("disabled");
 	  			} else {
 	  				$.notify({
 						// options
@@ -196,6 +198,7 @@ $("#btn-submit").click(function(event){
 							align: "right"
 						}
 					});
+					$("#btn-submit").removeAttr("disabled");
 	  			}
 	  		}
 	  	});
