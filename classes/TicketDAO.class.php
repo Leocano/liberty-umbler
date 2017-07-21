@@ -638,6 +638,7 @@ class TicketDAO{
 		$db = Database::getInstance();
 
 		// var_dump($search);
+		$search = trim($search);
 
 		$db->query("SELECT
 						tick.*
@@ -724,6 +725,7 @@ class TicketDAO{
 		$db = Database::getInstance();
 
 		// var_dump($search);
+		$search = trim($search);
 
 		$db->query("SELECT
 						tick.*
@@ -782,6 +784,7 @@ class TicketDAO{
 		$db = Database::getInstance();
 
 		// var_dump($search);
+		$search = trim($search);
 
 		$db->query("SELECT
 						tick.*

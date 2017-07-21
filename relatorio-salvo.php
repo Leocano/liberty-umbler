@@ -190,9 +190,9 @@ require 'scripts/datatable.php';
 			table.page.len(-1).draw();
 			$('#data-table').tableExport({fileName: 'Support Center',
 				  type: 'pdf',
-				  jspdf: {format: 'bestfit',
+				  jspdf: {format: 'bestfit',vvvcvcv
 				  	margins: {left:10, right:10, top:20, bottom:20},
-				  	autotable: {styles: {overflow: 'hidden' ,
+				  	autotable: {styles: {overflow: 'linebreak' ,
 				  						 fontSize: 10,
 				  						 fillColor: 'inherit', 
                                		 	 textColor: 'inherit'

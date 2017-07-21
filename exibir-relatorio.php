@@ -198,7 +198,7 @@ require 'scripts/datatable.php';
 				  type: 'pdf',
 				  jspdf: {format: 'bestfit',
 				  	margins: {left:10, right:10, top:20, bottom:20},
-				  	autotable: {styles: {overflow: 'hidden' ,
+					autotable: {styles: {overflow: 'linebreak' ,
 				  						 fontSize: 10,
 				  						 fillColor: 'inherit', 
                                		 	 textColor: 'inherit'
