@@ -186,8 +186,15 @@ require 'scripts/datatable.php';
 
 			var htmltable= document.getElementById('data-export');
 	       	var html = htmltable.outerHTML;
-	       	window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));
-		    
+
+	       	// window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));
+			var download_link = document.createElement('a');
+			download_link.href = "data:application/vnd.ms-excel," + encodeURIComponent(html);
+			download_link.download = "<?=$report_info[0]->name_report?>.xls";
+			document.body.appendChild(download_link);
+			download_link.click();
+    		document.body.removeChild(download_link);
+
 			table.page.len(25).draw();
 		});
 
