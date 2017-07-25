@@ -183,7 +183,7 @@ require 'scripts/datatable.php';
 
 	  		// window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));
 			var download_link = document.createElement('a');
-			download_link.href = "data:application/vnd.ms-excel," + encodeURIComponent(html);
+			download_link.href = "data:application/vnd.ms-excel,<meta http-equiv='content-type' content='text/plain; charset=UTF-8'/>" + encodeURIComponent(html);
 			download_link.download = "<?=$name_report?>.xls";
 			document.body.appendChild(download_link);
 			download_link.click();
@@ -198,7 +198,6 @@ require 'scripts/datatable.php';
 				  jspdf: {format: 'bestfit',
 				  	margins: {left:10, right:10, top:20, bottom:20},
 				  	autotable: {styles: {overflow: 'linebreak' ,
-				  						 fontSize: 10,
 				  						 fontSize: 10,
 				  						 fillColor: 'inherit', 
                                		 	 textColor: 'inherit'
@@ -232,11 +231,6 @@ require 'scripts/datatable.php';
 			var dateColumn = <?=$date_column?>
 
 			var table = $('#data-table').DataTable({
-				// "colReorder" : true ,
-				// "dom": 'Bfrtip',
-				// "buttons": [
-			 //        'excel', 'pdf'
-			 //    ] ,
 		        "columnDefs": [
 		            { "visible": false, "targets": groupRow} ,
 		            { "orderable": false, "targets": "_all"}

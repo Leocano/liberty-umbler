@@ -46,11 +46,17 @@ $new_id_status = $ticket[0]->id_status;
 $external_number = $ticket[0]->external_number;
 $id_category = $ticket[0]->id_category;
 
-var_dump($id_category);
-
-
 //Calculo de tempo total
 $total_time = $dao->getTotalHours($id_ticket);
+$total_minutes = $dao->getTotalMinutes($id_ticket);
+
+while ($total_minutes[0]->total_minutes >= 60) {
+	$total_time[0]->total_hours = $total_time[0]->total_hours + 1;
+	$total_minutes[0]->total_minutes = $total_minutes[0]->total_minutes - 60;
+}
+
+$total_hours = $total_time[0]->total_hours;
+$total_minutes = $total_minutes[0]->total_minutes;
 
 $dao = new ProposalDAO;
 $proposal = $dao->getProposalById($proposal);
@@ -172,9 +178,9 @@ $timekeeping = $dao->getTimekeepingByTicketId($id_ticket);
 
 									?>
 							<button class="btn btn-default <?=$ticket[0]->disabled?> <?=$no_close?>" <?=$ticket[0]->disabled?> <?=$no_close?> href="p-fechar-chamado.php" id="btn-close-ticket">
-										<i class="fa fa-lock"></i>
-										&nbsp;Fechar
-									</button>
+								<i class="fa fa-lock"></i>
+								&nbsp;Fechar
+							</button>
 							<form class="hidden" id="form-close-ticket">
 								<textarea class="hidden" name="j_ticket"><?=$json_ticket?></textarea>
 								<input type="hidden" name="status" value="2">
@@ -393,8 +399,7 @@ $timekeeping = $dao->getTimekeepingByTicketId($id_ticket);
 							<h2 class="h4"><strong>Total de Horas</strong></h2>
 							<p>
 								<?php
-									$total_time = explode(":", $total_time[0]->total_hours);
-									echo $total_time[0] . 'h ' . $total_time[1] . 'min';
+									echo $total_hours . 'h ' . $total_minutes . 'min';
 								?>
 							</p>
 						</div>
@@ -570,7 +575,7 @@ $timekeeping = $dao->getTimekeepingByTicketId($id_ticket);
 											<th colspan="5">
 												Total:
 												<?php 
-													echo $total_time[0] . 'h ' . $total_time[1] . 'min';
+													echo $total_hours . 'h ' . $total_minutes . 'min';
 												?>
 											</th>
 										</tr>

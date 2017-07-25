@@ -615,7 +615,7 @@ class TicketDAO{
 		$db = Database::getInstance();
 
 		$db->query("SELECT 
-						SEC_TO_TIME( SUM(time_to_sec(hours))) AS total_hours
+						SUM(HOUR(hours)) AS total_hours
 					FROM
 						tb_timekeeping
 					WHERE
@@ -624,6 +624,23 @@ class TicketDAO{
 					,
 					array($ticket_id)
 					);
+
+		return $db->getResults();
+	}
+
+	public function getTotalMinutes($ticket_id) {
+		$db = Database::getInstance();
+		
+		$db->query("SELECT 
+			SUM(MINUTE(hours)) AS total_minutes
+		FROM
+			tb_timekeeping
+		WHERE
+			id_ticket = ?
+		"
+		,
+		array($ticket_id)
+		);
 
 		return $db->getResults();
 	}
