@@ -48,7 +48,8 @@ $date = str_replace("/","-",$date);
 $date = strtotime($date);
 setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
-$month = htmlentities(strftime('%B/%Y', $date));
+$month_upper = ucfirst(strftime('%B', $date));
+$month = htmlentities(strftime('%m/%Y - ' . $month_upper, $date));
 
 $date = date('Y-m-d', $date);
 //

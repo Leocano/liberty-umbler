@@ -45,13 +45,14 @@ $date = str_replace("/","-",$date);
 $date = strtotime($date);
 setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
-$month = htmlentities(strftime('%B/%Y', $date));
+$month_upper = ucfirst(strftime('%B', $date));
+$month = htmlentities(strftime('%m/%Y - ' . $month_upper, $date));
 
 $date = date('Y-m-d', $date);
 //
 
 $today = Date('Y-m-d');
-    
+
 $diff = abs(strtotime($date) - strtotime($today));
 $years = floor($diff / (365*60*60*24));
 $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
