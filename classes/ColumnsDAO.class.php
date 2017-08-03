@@ -20,7 +20,7 @@ class ColumnsDAO{
 					FROM
 						tb_report_columns
 					WHERE
-						name_column IN ('date_timekeeping' , 'creation_date')");
+						name_column IN ('date_timekeeping' , 'creation_date', 'date_closed')");
 
 		return $db->getResults();
 	}

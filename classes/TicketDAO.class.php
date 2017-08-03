@@ -37,6 +37,7 @@ class TicketDAO{
 						,	?
 						,	DEFAULT
 						,	DEFAULT
+						,	DEFAULT
 						)"
 						,
 						array(
@@ -91,6 +92,7 @@ class TicketDAO{
 						,	?
 						,	?
 						,	DEFAULT
+						, 	DEFAULT
 						)"
 						,
 						array(
@@ -443,7 +445,19 @@ class TicketDAO{
 	public function changeStatus($id, $status){
 		$db = Database::getInstance();
 
-		$db->query("UPDATE
+		if ($status == 2) {
+			$db->query("UPDATE
+							tb_tickets
+						SET
+							id_status = ?
+						,	date_closed = CURRENT_TIMESTAMP
+						WHERE 
+							id_ticket = ?"
+						,
+						array($status, $id)
+						);
+		} else {
+			$db->query("UPDATE
 						tb_tickets
 					SET
 						id_status = ?
@@ -452,6 +466,7 @@ class TicketDAO{
 					,
 					array($status, $id)
 					);
+		}
 	}
 
 	public function getAssignedTickets($id){

@@ -35,12 +35,12 @@ try {
      //Define os destinatário(s)
      //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
      foreach ($user_emails as $email) {
-        $mail->AddAddress($email->email, $email->name);
+        $mail->AddAddress("leonardo.cano@letnis.com.br", $email->name);
      }
       
      //Campos abaixo são opcionais 
      //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-     // $mail->AddCC('rodrigo.souza@letnis.com.br', 'Rodrigo Souza'); 
+     //$mail->AddCC('rodrigo.souza@letnis.com.br', 'Rodrigo Souza'); 
      //$mail->AddBCC('destinatario_oculto@dominio.com.br', 'Destinatario2`'); // Cópia Oculta
      //$mail->AddAttachment('images/phpmailer.gif');      // Adicionar um anexo
  
