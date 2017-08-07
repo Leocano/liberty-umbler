@@ -19,11 +19,18 @@ $id_companies = $_POST['slt-companies'];
 
 $id_report = $_POST['id-report'];
 
+$user = $_SESSION['user'];
+
 if (isset($_POST['txt-parameter'])){
 	$condition = $_POST['slt-condition'];
 	$criteria = $_POST['slt-criteria'];
 	$parameter = $_POST['txt-parameter'];
 	$connector = $_POST['slt-connector'];
+
+	if ($user->checkProfile(array(1)) && $parameter[0] != $user->getName()) {
+		echo "block";
+		exit();
+	}
 
 	$filter_attr = array();
 	for ($i = 0; $i < count($condition); $i++) { 

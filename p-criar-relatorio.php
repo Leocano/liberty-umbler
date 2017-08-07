@@ -17,6 +17,8 @@ $id_user = $_POST['id-user'];
 $id_view = $_POST['slt-view'];
 $id_companies = $_POST['slt-companies'];
 
+$user = $_SESSION['user'];
+
 if (isset($_POST['txt-parameter'])){
 	$condition = $_POST['slt-condition'];
 	$criteria = $_POST['slt-criteria'];
@@ -24,7 +26,13 @@ if (isset($_POST['txt-parameter'])){
 	$connector = $_POST['slt-connector'];
 
 	$filter_attr = array();
-	for ($i = 0; $i < count($condition); $i++) { 
+
+	if ($user->checkProfile(array(1)) && $parameter[0] != $user->getName()) {
+		echo "block";
+		exit();
+	}
+
+	for ($i = 0; $i < count($condition); $i++) {
 		$filter_attr[$i] = $condition[$i] . "&" . $criteria[$i] . "&" . $parameter[$i] . "&" . $connector[$i];
 	}
 

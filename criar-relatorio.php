@@ -415,6 +415,18 @@ $id_user = $user->getIdUser();
 								align: "right"
 							}
 						});
+					} else if (status == 'block') {
+						$.notify({
+							// options
+							message: 'Consultores não podem alterar o representante!' 
+						},{
+							// settings
+							type: 'danger' ,
+							placement: {
+								from: "bottom",
+								align: "right"
+							}
+						});
 					} else {
 						// alert(status);
 						var data = JSON.parse(status);

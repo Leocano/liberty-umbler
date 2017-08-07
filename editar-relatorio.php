@@ -676,6 +676,18 @@ $(document).ready(function(){
 							align: "right"
 						}
 					});
+				} else if (status == 'block') {
+					$.notify({
+						// options
+						message: 'Consultores não podem alterar o representante!' 
+					},{
+						// settings
+						type: 'danger' ,
+						placement: {
+							from: "bottom",
+							align: "right"
+						}
+					});
 				} else {
 					var data = JSON.parse(status);
 					window.location = "exibir-relatorio.php?token=" + data["token"] + "&lastid=" + data['id'];
