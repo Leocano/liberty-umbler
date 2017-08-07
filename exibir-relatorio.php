@@ -66,11 +66,12 @@ require 'scripts/main-script.php';
 require 'scripts/datatable.php';
 
 ?>
-<script type="text/javascript" src="plugins/export/libs/FileSaver/FileSaver.min.js"></script>
-<script type="text/javascript" src="plugins/export/libs/js-xlsx/xlsx.core.min.js"></script>
+<!-- <script type="text/javascript" src="plugins/export/libs/FileSaver/FileSaver.min.js"></script>
+<script type="text/javascript" src="plugins/export/libs/js-xlsx/xlsx.core.min.js"></script> -->
 <script type="text/javascript" src="plugins/export/libs/jsPDF/jspdf.min.js"></script>
 <script type="text/javascript" src="plugins/export/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
 <script type="text/javascript" src="plugins/export/tableExport.min.js"></script>
+<script type="text/javascript" src="plugins/fs-master/FileSaver.min.js"></script>
 
 <div class="back-to-top">
 	<a href="#top"><i class="fa fa-2x fa-arrow-circle-up"></i></a>
@@ -187,13 +188,16 @@ require 'scripts/datatable.php';
 			var htmltable= document.getElementById('data-export');
 	       	var html = htmltable.outerHTML;
 
+			var file = new File([html], "<?=$report_info[0]->name_report?>.xls", {type: "application/vnd.ms-excel; charset=UTF-8"});
+			saveAs(file);
+
 	       	// window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));
-			var download_link = document.createElement('a');
-			download_link.href = "data:application/vnd.ms-excel," + encodeURIComponent(html);
-			download_link.download = "<?=$report_info[0]->name_report?>.xls";
-			document.body.appendChild(download_link);
-			download_link.click();
-    		document.body.removeChild(download_link);
+			// var download_link = document.createElement('a');
+			// download_link.href = "data:application/vnd.ms-excel," + encodeURIComponent(html);
+			// download_link.download = "<?=$report_info[0]->name_report?>.xls";
+			// document.body.appendChild(download_link);
+			// download_link.click();
+    		// document.body.removeChild(download_link);
 
 			table.page.len(25).draw();
 		});
@@ -361,11 +365,6 @@ require 'scripts/datatable.php';
 			var hourPos = <?=$hour_pos?>;
 
 			var table = $('#data-table').DataTable({
-				// "colReorder" : true ,
-				// "dom": 'Bfrtip',
-				// "buttons": [
-			 //        'excel', 'pdf'
-			 //    ] ,
 		        "columnDefs": [
 		            { "orderable": false, "targets": "_all"}
 		        ],

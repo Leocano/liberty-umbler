@@ -51,11 +51,10 @@ require 'scripts/main-script.php';
 require 'scripts/datatable.php';
 
 ?>
-<script type="text/javascript" src="plugins/export/libs/FileSaver/FileSaver.min.js"></script>
-<script type="text/javascript" src="plugins/export/libs/js-xlsx/xlsx.core.min.js"></script>
 <script type="text/javascript" src="plugins/export/libs/jsPDF/jspdf.min.js"></script>
 <script type="text/javascript" src="plugins/export/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
 <script type="text/javascript" src="plugins/export/tableExport.min.js"></script>
+<script type="text/javascript" src="plugins/fs-master/FileSaver.min.js"></script>
 
 <div class="back-to-top">
 	<a href="#top"><i class="fa fa-2x fa-arrow-circle-up"></i></a>
@@ -73,13 +72,13 @@ require 'scripts/datatable.php';
 			<br>
 			Período:
 			<?php 
-				if($report_info[0]->date_field_report = "tb_timekeeping.current_month"){
+				if($report->date_field_report == "tb_timekeeping.current_month"){
 					echo "De " . Date('01/m/Y') . " até " . Date('t/m/Y');
-				} else if($report_info[0]->date_field_report = "tb_timekeeping.last_month"){
+				} else if($report->date_field_report == "tb_timekeeping.last_month"){
 					$last_month = strtotime("now -1 month");
 					echo "De " . Date('01/m/Y', $last_month) . " até " . Date('t/m/Y', $last_month);
 				} else {
-					echo $report_info[0]->timespan_report;
+					echo $report->timespan_report;
 				}
 			?>
 		</p>
@@ -179,15 +178,19 @@ require 'scripts/datatable.php';
 			$("#data-export table").html($("#data-table").html());
 
 			var htmltable= document.getElementById('data-export');
-	  		var html = htmltable.outerHTML;
+	  		var html = htmltable.outerHTML
+
+			var file = new File([html], "<?=$name_report?>.xls", {type: "application/vnd.ms-excel; charset=UTF-8"});
+			saveAs(file);
 
 	  		// window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));
-			var download_link = document.createElement('a');
-			download_link.href = "data:application/vnd.ms-excel,<meta http-equiv='content-type' content='text/plain; charset=UTF-8'/>" + encodeURIComponent(html);
-			download_link.download = "<?=$name_report?>.xls";
-			document.body.appendChild(download_link);
-			download_link.click();
-    		document.body.removeChild(download_link);
+			// var download_link = document.createElement('a');
+			// download_link.href = "data:application/vnd.ms-excel,<meta http-equiv='content-type' content='text/plain; charset=UTF-8'/>" + encodeURIComponent(html);
+			// download_link.download = "<?=$name_report?>.xls";
+			// document.body.appendChild(download_link);
+			// download_link.click();
+    		// document.body.removeChild(download_link);
+			
 			table.page.len(25).draw();
 		});
 
@@ -216,7 +219,6 @@ require 'scripts/datatable.php';
 			?>
 			var table = $('#data-table').DataTable({
 				"colReorder" : true ,
-				// "dom": 'Bfrtip',
 				"language": {
 		            "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json"
 		        },
@@ -227,8 +229,8 @@ require 'scripts/datatable.php';
 		} else if ($sum == "on" && $col_to_group !== null){
 			?>
 			var groupRow = <?=$col_to_group?>;
-			var hourPos = <?=$hour_pos?>;	
-			var dateColumn = <?=$date_column?>
+			var hourPos = <?=$hour_pos?>;
+			var dateColumn = <?=$date_column?>;
 
 			var table = $('#data-table').DataTable({
 		        "columnDefs": [
@@ -308,7 +310,6 @@ require 'scripts/datatable.php';
                         '<tr role="row" class="group"><td class="text-left" colspan="' + qtd_columns + '" style="font-weight: bold; background-color: #D0E9C6;">Resumo do relatório: ' + pad(finalHours) + ':' + pad(finalMinutes) + ':00</td></tr>'
 
                     );
-					// setExport();
 		        }
 		    });
 			<?php
