@@ -188,7 +188,7 @@ require 'scripts/datatable.php';
 			var htmltable= document.getElementById('data-export');
 	       	var html = htmltable.outerHTML;
 
-			var file = new File([html], "<?=$report_info[0]->name_report?>.xls", {type: "application/vnd.ms-excel; charset=UTF-8"});
+			var file = new File([html], "<?=$report_info[0]->name_report?>.xls", {type: "text/vnd.ms-excel; charset=UTF-8"});
 			saveAs(file);
 
 	       	// window.open('data:application/vnd.ms-excel,<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>' + encodeURIComponent(html));

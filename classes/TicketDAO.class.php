@@ -1019,20 +1019,25 @@ class TicketDAO{
 		);
 	}
 
-	public function getSentMail($id){
+	public function getSentMail($id, $id_creator){
 		$db = Database::getInstance();
 
 		$db->query("
 					SELECT
 						tick.sent_mail
+					,	user.active
 					FROM
 						tb_tickets		tick
+					,	tb_users 		user
 					WHERE
 						tick.id_ticket = ?
-
+					AND
+						user.id_user = tick.id_creator
+					AND
+						user.id_user = ?
 					"
 					,
-					array($id)
+					array($id, $id_creator)
 					) or die(mysql_error());
 
 		return $db->getResults();
