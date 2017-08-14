@@ -202,21 +202,31 @@ require 'scripts/datatable.php';
 			table.page.len(25).draw();
 		});
 
-		$("#btn-pdf").click(function(event){
-			event.preventDefault();
+		$("#btn-pdf").click(function(){
+			// event.preventDefault();
 			table.page.len(-1).draw();
-			$('#data-table').tableExport({fileName: 'Support Center',
-				  type: 'pdf',
-				  jspdf: {format: 'bestfit',
-				  	margins: {left:10, right:10, top:20, bottom:20},
-					autotable: {styles: {overflow: 'linebreak' ,
-				  						 fontSize: 10,
-				  						 fillColor: 'inherit', 
-                               		 	 textColor: 'inherit'
-				  						},
-				  				columnWidth: 'auto',
-				  				theme: 'striped'}
-				  }
+			$('#data-table').tableExport({
+				fileName: 'Support Center',
+				type: 'pdf',
+				jspdf: {
+					format: 'bestfit',
+					margins: {
+						left: 10,
+						right: 10,
+						top: 20,
+						bottom: 20
+					},
+					autotable: {
+						styles: {
+							overflow: 'linebreak',
+							fontSize: 10,
+							fillColor: 'inherit',
+							textColor: 'inherit'
+						},
+						columnWidth: 'auto',
+						theme: 'striped'
+					}
+				}
 			});
 			table.page.len(25).draw();
 		});
@@ -226,7 +236,6 @@ require 'scripts/datatable.php';
 			?>
 			var table = $('#data-table').DataTable({
 				"colReorder" : true ,
-				// "dom": 'Bfrtip',
 				"language": {
 		            "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json"
 		        },
