@@ -42,8 +42,8 @@ $id_profile = $profile->getIdProfile();
                     <ul class="nav navbar-nav">
                         <li><a href="home.php"><i class="fa fa-home"></i>&nbsp;&nbsp;Home</a></li>
                         <?php
-                            $menu = MenuFactory::factory($id_profile);
-                            $menu->buildMenu();
+                            // $menu = MenuFactory::factory($id_profile);
+                            // $menu->buildMenu();
                         ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -64,18 +64,9 @@ $id_profile = $profile->getIdProfile();
                                 }
                                 ?>
                                 <li><a href="p-logout.php"><i class="fa fa-plug"></i>&nbsp;&nbsp;Logout</a></li>
-                                <li><a href="cp-index.php"><i class="fa fa-plug"></i>&nbsp;&nbsp;CP</a></li>
                             </ul>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-right" method="GET" action="pesquisar-chamado.php">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Pesquisar chamados" name="txt-search">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> &nbsp;Procurar</button>
-                            </span>
-                        </div><!-- /input-group -->
-                    </form>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
