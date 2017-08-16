@@ -17,6 +17,9 @@ require 'headers/cp-header.php';
 			<button data-toggle="modal" data-target="#modal-cp-timekeeping" id="btn-cp-add" type="button" class="btn btn-default">
 				Novo
 			</button>
+			<button data-toggle="modal" data-target="#modal-cp-timekeeping" id="btn-cp-add" type="button" class="btn btn-default">
+				Visualizar
+			</button>
 		</div>
 	</div>
 </div>
@@ -40,8 +43,8 @@ require 'scripts/ajax-form.php';
 				id_user: <?=$user->getIdUser()?>
 			},
 			success: function(status) {
-				status = JSON.parse(status);
 				console.log(status);
+				status = JSON.parse(status);
 			}
 		});
 	});

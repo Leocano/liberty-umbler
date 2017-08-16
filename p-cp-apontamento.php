@@ -19,9 +19,9 @@ if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time))) {
 }
 
 $date = str_replace("/", "-", $date);
+$date = strtotime($date);
 setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
-
 $date = Date('Y-m-d', $date);
 
 $db = Database::getInstance();
