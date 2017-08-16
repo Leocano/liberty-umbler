@@ -26,8 +26,26 @@ require 'modals/cp-apontamento-modal.php';
 require 'scripts/main-script.php';
 require 'scripts/jquery-ui.php';
 require 'scripts/clockpicker.php';
+require 'scripts/ajax-form.php';
 ?>
 <script>
+	$btn_cp_timekeeping = $("#btn-cp-timekeeping");
+
+	$btn_cp_timekeeping.click(function(event){
+		event.preventDefault();
+		$("#form-cp-timekeeping").ajaxSubmit({
+			url: 'p-cp-apontamento.php',
+			type: 'post',
+			data: {
+				id_user: <?=$user->getIdUser()?>
+			},
+			success: function(status) {
+				status = JSON.parse(status);
+				console.log(status);
+			}
+		});
+	});
+
 	$( function() {
 		$( ".datepicker" ).datepicker({
 			changeMonth: true,
