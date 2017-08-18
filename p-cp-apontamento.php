@@ -26,10 +26,7 @@ setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
 $date = Date('Y-m-d', $date);
 
-// if ($) {
-//     $response = array();
-// }
-
+$db = Database::getInstance();
 $db->query(
     "
     SELECT
@@ -51,7 +48,24 @@ $db->query(
     )
 );
 
-$db = Database::getInstance();
+$time = $db->getResults();
+
+if ($time[0] != null) {
+    $response = array(
+        'status' => 'failed',
+        'msg' => 'É permitido apenas 1 apontamento por dia!'
+    );
+    echo json_encode($response);
+    exit();
+}
+
+$hours_worked = ($exit_time - $entry_time) - ($break_finish - $break_start);
+
+if ($hours_worked > 8) {
+    $approved = 0;
+} else {
+    $approved = 1;
+}
 
 $db->query(
     "
@@ -66,7 +80,7 @@ $db->query(
     ,   ?
     ,   ?
     ,   ?
-    ,   1
+    ,   ?
     )
     "
     ,
@@ -78,6 +92,7 @@ $db->query(
     ,   $exit_time
     ,   $break_start
     ,   $break_finish
+    ,   $approved
     )
 );
 

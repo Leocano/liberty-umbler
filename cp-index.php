@@ -45,7 +45,7 @@ require 'scripts/ajax-form.php';
 			},
 			success: function(status) {
 				console.log(status);
-				status = JSON.parse(status);
+				// status = JSON.parse(status);
 			}
 		});
 	});
