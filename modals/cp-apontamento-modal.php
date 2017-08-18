@@ -11,7 +11,7 @@
                         <div class="col-md-6 form-group">
                             <label>Tipo</label>
                             <select class="form-control" name="slt-type" >
-                                <option value="Escritório">Escritório</option>
+                                <option value="Escritorio">Escritório</option>
                                 <option value="Cliente">Cliente</option>
                             </select>
                         </div>
@@ -34,6 +34,26 @@
                             <label>Saída</label>
                             <div class="input-group clockpicker">
                                 <input type="text" class="form-control date-input" name="txt-exit" readonly value="17:00">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Início do almoço</label>
+                            <div class="input-group clockpicker">
+                                <input type="text" class="form-control date-input" name="txt-break-start" readonly value="12:00">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Fim do almoço</label>
+                            <div class="input-group clockpicker">
+                                <input type="text" class="form-control date-input" name="txt-break-finish" readonly value="13:00">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </span>

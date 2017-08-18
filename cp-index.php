@@ -15,10 +15,10 @@ require 'headers/cp-header.php';
 		</div>
 		<div class="col-xs-12">
 			<button data-toggle="modal" data-target="#modal-cp-timekeeping" id="btn-cp-add" type="button" class="btn btn-default">
-				Novo
+				Novo Apontamento
 			</button>
-			<button data-toggle="modal" data-target="#modal-cp-timekeeping" id="btn-cp-add" type="button" class="btn btn-default">
-				Visualizar
+			<button data-toggle="modal" data-target="#modal-cp-report" type="button" class="btn btn-default">
+				Folha de Ponto
 			</button>
 		</div>
 	</div>
@@ -26,6 +26,7 @@ require 'headers/cp-header.php';
 
 <?php
 require 'modals/cp-apontamento-modal.php';
+require 'modals/cp-relatorio-modal.php';
 require 'scripts/main-script.php';
 require 'scripts/jquery-ui.php';
 require 'scripts/clockpicker.php';
@@ -56,12 +57,26 @@ require 'scripts/ajax-form.php';
 		});
 	});
 
+	$( function() {
+		$( ".monthpicker" ).datepicker({
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'mm/yy',
+			onClose: function(dateText, inst) { 
+				var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+				var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+				$(this).datepicker('setDate', new Date(year, month, 1));
+			}
+		});
+	});
+
 	$.datepicker.regional['pt-BR'] = {
 		closeText: 'Fechar',
 		prevText: '&#x3c;Anterior',
 		nextText: 'Pr&oacute;ximo&#x3e;',
 		currentText: 'Hoje',
-		monthNames: ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho',
+		monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
 		'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
 		monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
 		'Jul','Ago','Set','Out','Nov','Dez'],
