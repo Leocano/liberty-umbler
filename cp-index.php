@@ -34,6 +34,7 @@ require 'scripts/ajax-form.php';
 ?>
 <script>
 	$btn_cp_timekeeping = $("#btn-cp-timekeeping");
+	$btn_cp_report = $("#btn-cp-report");
 
 	$btn_cp_timekeeping.click(function(event){
 		event.preventDefault();
@@ -49,6 +50,21 @@ require 'scripts/ajax-form.php';
 			}
 		});
 	});
+
+	// $btn_cp_report.click(function(event) {
+	// 	event.preventDefault();
+	// 	// location.href = "cp-folha-de-ponto.php;
+	// 	$("#form-cp-report").ajaxSubmit({
+	// 		url: 'p-cp-folha-de-ponto.php',
+	// 		type: 'post',
+	// 		data: {
+	// 			id_user: <?=$user->getIdUser()?>
+	// 		},
+	// 		success: function(status) {
+	// 			console.log(status);
+	// 		}
+	// 	});
+	// });
 
 	$( function() {
 		$( ".datepicker" ).datepicker({
