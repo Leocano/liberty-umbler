@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>Usuário</label>
-                                <select class="form-control selectpicker" name="id-user" data-live-search="true">
+                                <select class="form-control selectpicker" name="id-user" data-live-search="true" data-title="Selecione um usuário">
                                 <?php 
                                     foreach ($consultants as $consultant) {
                                     ?>

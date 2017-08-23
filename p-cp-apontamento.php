@@ -12,7 +12,7 @@ $break_start = $_POST['txt-break-start'];
 $break_finish = $_POST['txt-break-finish'];
 $id_user = $_POST['id-user'];
 
-if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time))) {
+if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time, $break_start, $break_finish, $id_user))) {
     $response = array(
         'status' => 'failed',
         'msg' => 'Preencha todos os campos!'

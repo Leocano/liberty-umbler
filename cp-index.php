@@ -32,6 +32,8 @@ require 'scripts/bootstrap-select.php';
 require 'scripts/jquery-ui.php';
 require 'scripts/clockpicker.php';
 require 'scripts/ajax-form.php';
+require 'scripts/animate.php';
+require 'scripts/bootstrap-notify.php';
 ?>
 <script>
 	$btn_cp_timekeeping = $("#btn-cp-timekeeping");
@@ -46,8 +48,33 @@ require 'scripts/ajax-form.php';
 				id_user: <?=$user->getIdUser()?>
 			},
 			success: function(status) {
-				console.log(status);
-				// status = JSON.parse(status);
+				status = $.parseJSON(status);
+				if(status['status'] == "failed") {
+					$.notify({
+						// options
+						message: status['msg'] 
+					},{
+						// settings
+						type: 'danger' ,
+						placement: {
+							from: "bottom",
+							align: "right"
+						}
+					});
+				} else {
+					$.notify({
+						// options
+						message: status['msg'] 
+					},{
+						// settings
+						type: 'success' ,
+						placement: {
+							from: "bottom",
+							align: "right"
+						}
+					});
+					$("#modal-cp-timekeeping").modal("toggle");
+				}
 			}
 		});
 	});

@@ -14,13 +14,12 @@ $year = substr($month_and_year, -4, 4);
 $db->query(
     "
     SELECT
-        time.cp_timekeeping_type,
+        time.type_cp,
         DATE_FORMAT(time.date_cp_timekeeping, '%d/%m/%Y') as date,
         time.entry_time,
         time.exit_time,
         time.break_start,
-        time.break_finish,
-        time.approved,
+        time.break_end,
         user.name
     FROM
         tb_cp_timekeeping   time,
@@ -73,10 +72,10 @@ $results = $db->getResults();
                             <tr>
                                 <td><?=$result->date?></td>
                                 <td><?=$result->name?></td>
-                                <td><?=$result->cp_timekeeping_type?></td>
+                                <td><?=$result->type_cp?></td>
                                 <td><?=$result->entry_time?></td>
                                 <td><?=$result->break_start?></td>
-                                <td><?=$result->break_finish?></td>
+                                <td><?=$result->break_end?></td>
                                 <td><?=$result->exit_time?></td>
                             </tr>
                             <?php
