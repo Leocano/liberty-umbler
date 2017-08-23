@@ -28,6 +28,7 @@ require 'headers/cp-header.php';
 require 'modals/cp-apontamento-modal.php';
 require 'modals/cp-relatorio-modal.php';
 require 'scripts/main-script.php';
+require 'scripts/bootstrap-select.php';
 require 'scripts/jquery-ui.php';
 require 'scripts/clockpicker.php';
 require 'scripts/ajax-form.php';

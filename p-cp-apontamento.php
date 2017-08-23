@@ -10,6 +10,7 @@ $entry_time = $_POST['txt-entry'];
 $exit_time = $_POST['txt-exit'];
 $break_start = $_POST['txt-break-start'];
 $break_finish = $_POST['txt-break-finish'];
+$id_user = $_POST['id-user'];
 
 if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time))) {
     $response = array(
@@ -33,7 +34,7 @@ $db->query(
         entry_time,
         exit_time,
         break_start,
-        break_finish
+        break_end
     FROM
         tb_cp_timekeeping
     WHERE
@@ -62,9 +63,12 @@ if ($time[0] != null) {
 $hours_worked = ($exit_time - $entry_time) - ($break_finish - $break_start);
 
 if ($hours_worked > 8) {
-    $approved = 0;
-} else {
-    $approved = 1;
+    $response = array(
+        'status' => 'failed',
+        'msg' => 'Horas extras devem ser apontadas separadamente!'
+    );
+    echo json_encode($response);
+    exit();
 }
 
 $db->query(
@@ -80,7 +84,7 @@ $db->query(
     ,   ?
     ,   ?
     ,   ?
-    ,   ?
+    ,   DEFAULT
     )
     "
     ,
@@ -89,10 +93,9 @@ $db->query(
     ,   $type
     ,   $date
     ,   $entry_time
-    ,   $exit_time
     ,   $break_start
     ,   $break_finish
-    ,   $approved
+    ,   $exit_time
     )
 );
 

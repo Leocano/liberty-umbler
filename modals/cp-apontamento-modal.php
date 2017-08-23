@@ -7,6 +7,32 @@
             </div>
             <form name="form-cp-timekeeping" id="form-cp-timekeeping">
                 <div class="modal-body">
+                    <?php
+                    $dao = new ConsultantDAO;
+                    $consultants = $dao->getAllConsultants();
+                    if ($user->checkProfile(array(2, 3))){
+                    ?>
+                        <div class="row">
+                            <div class="col-xs-12 form-group">
+                                <label>Usuário</label>
+                                <select class="form-control selectpicker" name="id-user" data-live-search="true">
+                                <?php 
+                                    foreach ($consultants as $consultant) {
+                                    ?>
+                                        <option value="<?=$consultant->id_user?>"><?=$consultant->name?></option>
+                                    <?php
+                                    }
+                                ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php
+                    } else {
+                        ?>
+                        <input type="hidden" name="id-user" value="<?=$user->getIdUser()?>">
+                        <?php
+                    }
+                    ?>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Tipo</label>
