@@ -41,10 +41,20 @@
                                 <option value="Cliente">Cliente</option>
                             </select>
                         </div>
+                        <?php
+                        if ($user->checkProfile(array(2,3))){
+                        ?>
                         <div class="col-md-6 form-group">
                             <label>Data</label>
                             <input class="datepicker date-input form-control" type="text" readonly name="txt-date" value="">
                         </div>
+                        <?php 
+                        } else {
+                            ?>
+                            <input type="hidden" name="txt-date" value="<?=Date("d/m/Y")?>">
+                            <?php
+                        }
+                        ?>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">

@@ -55,7 +55,7 @@ $date = date('Y-m-d', $date);
 //
 
 $today = Date('Y-m-d');
-    
+
 $diff = abs(strtotime($date) - strtotime($today));
 $years = floor($diff / (365*60*60*24));
 $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));

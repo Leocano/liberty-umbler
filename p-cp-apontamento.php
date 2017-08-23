@@ -27,6 +27,16 @@ setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
 $date = Date('Y-m-d', $date);
 
+
+if ($user->checkProfile(array(1)) && $date != Date('Y-m-d')) {
+    $response = array(
+        'status' => 'failed',
+        'msg' => 'Apontamentos devem ser feitos diariamente!'
+    );
+    echo json_encode($response);
+    exit();
+}
+
 $db = Database::getInstance();
 $db->query(
     "
