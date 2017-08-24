@@ -8,7 +8,7 @@ require 'headers/cp-header.php';
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="plugins/clockpicker/src/clockpicker.css">
 
-<div class="col-xs-12 col-sm-6 col-md-4 well well-lg">
+<div class="col-xs-12 well well-lg">
 	<div class="row">
 		<div class="col-xs-12">
 			<h2 class="h3">CP</h2>
@@ -20,13 +20,85 @@ require 'headers/cp-header.php';
 			<button data-toggle="modal" data-target="#modal-cp-report" type="button" class="btn btn-default">
 				Folha de Ponto
 			</button>
+			<button data-toggle="modal" data-target="#modal-cp-extra" type="button" class="btn btn-default">
+				Lançar Hora Extra
+			</button>
 		</div>
 	</div>
 </div>
 
 <?php
+	if ($user->checkProfile(array(2, 3))){
+		$db = Database::getInstance();
+		$db->query(
+			"
+			SELECT
+				time.type_cp,
+				DATE_FORMAT(time.date_cp_timekeeping, '%d/%m/%Y') as date,
+				time.entry_time,
+				time.exit_time,
+				time.break_start,
+				time.break_end,
+				user.name
+			FROM
+				tb_cp_timekeeping   time,
+				tb_users            user
+			WHERE
+				approved = 0
+			AND
+				user.id_user = time.id_user
+			"
+		);
+		$results = $db->getResults();
+
+		?>
+		<div class="col-xs-12 well well-lg">
+			<div class="row">
+				<div class="col-xs-12">
+					<h2 class="h3">CP 2</h2>
+				</div>
+				<div class="col-xs-12">
+					<div class="table-responsive">
+						<table class="table table-striped table-hover">
+							<thead>
+								<th>Data</th>
+								<th>Nome</th>
+								<th>Tipo</th>
+								<th>Entrada</th>
+								<th>Início do almoço</th>
+								<th>Fim do almoço</th>
+								<th>Saída</th>
+							</thead>
+							<tbody>
+							<?php
+							foreach($results as $result) {
+								?>
+								<tr>
+									<td><?=$result->date?></td>
+									<td><?=$result->name?></td>
+									<td><?=$result->type_cp?></td>
+									<td><?=$result->entry_time?></td>
+									<td><?=$result->break_start?></td>
+									<td><?=$result->break_end?></td>
+									<td><?=$result->exit_time?></td>
+								</tr>
+								<?php
+							}
+							?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+?>
+
+<?php
 require 'modals/cp-apontamento-modal.php';
 require 'modals/cp-relatorio-modal.php';
+require 'modals/cp-extra-modal.php';
 require 'scripts/main-script.php';
 require 'scripts/bootstrap-select.php';
 require 'scripts/jquery-ui.php';
@@ -37,6 +109,7 @@ require 'scripts/bootstrap-notify.php';
 ?>
 <script>
 	$btn_cp_timekeeping = $("#btn-cp-timekeeping");
+	$btn_cp_extra = $("#btn-cp-extra");
 	$btn_cp_report = $("#btn-cp-report");
 
 	$btn_cp_timekeeping.click(function(event){
@@ -44,15 +117,12 @@ require 'scripts/bootstrap-notify.php';
 		$("#form-cp-timekeeping").ajaxSubmit({
 			url: 'p-cp-apontamento.php',
 			type: 'post',
-			data: {
-				id_user: <?=$user->getIdUser()?>
-			},
 			success: function(status) {
 				status = $.parseJSON(status);
 				if(status['status'] == "failed") {
 					$.notify({
 						// options
-						message: status['msg'] 
+						message: status['msg']
 					},{
 						// settings
 						type: 'danger' ,
@@ -64,7 +134,7 @@ require 'scripts/bootstrap-notify.php';
 				} else {
 					$.notify({
 						// options
-						message: status['msg'] 
+						message: status['msg']
 					},{
 						// settings
 						type: 'success' ,
@@ -74,6 +144,43 @@ require 'scripts/bootstrap-notify.php';
 						}
 					});
 					$("#modal-cp-timekeeping").modal("toggle");
+				}
+			}
+		});
+	});
+
+	$btn_cp_extra.click(function(event){
+		event.preventDefault();
+		$("#form-cp-extra").ajaxSubmit({
+			url: 'p-cp-extra.php',
+			type: 'post',
+			success: function(status) {
+				status = $.parseJSON(status);
+				if(status['status'] == "failed") {
+					$.notify({
+						// options
+						message: status['msg']
+					},{
+						// settings
+						type: 'danger' ,
+						placement: {
+							from: "bottom",
+							align: "right"
+						}
+					});
+				} else {
+					$.notify({
+						// options
+						message: status['msg']
+					},{
+						// settings
+						type: 'success' ,
+						placement: {
+							from: "bottom",
+							align: "right"
+						}
+					});
+					$("#modal-cp-extra").modal("toggle");
 				}
 			}
 		});

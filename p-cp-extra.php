@@ -8,11 +8,10 @@ $type = $_POST['slt-type'];
 $date = $_POST['txt-date'];
 $entry_time = $_POST['txt-entry'];
 $exit_time = $_POST['txt-exit'];
-$break_start = $_POST['txt-break-start'];
-$break_finish = $_POST['txt-break-finish'];
 $id_user = $_POST['id-user'];
+$justification = $_POST['txt-justification'];
 
-if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time, $break_start, $break_finish, $id_user))) {
+if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time, $id_user, $justification))) {
     $response = array(
         'status' => 'failed',
         'msg' => 'Preencha todos os campos!'
@@ -27,23 +26,20 @@ setlocale(LC_ALL, 'pt_BR');
 date_default_timezone_set('America/Sao_Paulo');
 $date = Date('Y-m-d', $date);
 
-if ($user->checkProfile(array(1)) && $date != Date('Y-m-d')) {
-    $response = array(
-        'status' => 'failed',
-        'msg' => 'Apontamentos devem ser feitos diariamente!'
-    );
-    echo json_encode($response);
-    exit();
-}
+// if ($user->checkProfile(array(1)) && $date != Date('Y-m-d')) {
+//     $response = array(
+//         'status' => 'failed',
+//         'msg' => 'Apontamentos devem ser feitos diariamente!'
+//     );
+//     echo json_encode($response);
+//     exit();
+// }
 
 $db = Database::getInstance();
 $db->query(
     "
     SELECT
-        entry_time,
-        exit_time,
-        break_start,
-        break_end
+        COUNT(*)
     FROM
         tb_cp_timekeeping
     WHERE
@@ -51,7 +47,7 @@ $db->query(
     AND
         date_cp_timekeeping = ?
     AND
-        is_extra = 0
+        is_extra = 1
     "
     ,
     array(
@@ -71,16 +67,9 @@ if ($time[0] != null) {
     exit();
 }
 
-$hours_worked = ($exit_time - $entry_time) - ($break_finish - $break_start);
+$hours_worked = ($exit_time - $entry_time);
 
-$response = array(
-    'status' => 'failed',
-    'msg' => $hours_worked
-);
-echo json_encode($response);
-exit();
-
-if ($hours_worked > 8) {
+if ($hours_worked > 14) {
     $response = array(
         'status' => 'failed',
         'msg' => 'Horas extras devem ser apontadas separadamente!'
@@ -99,13 +88,13 @@ $db->query(
     ,   ?
     ,   ?
     ,   ?
+    ,   null
+    ,   null
     ,   ?
+    ,   DEFAULT
+    ,   1
     ,   ?
-    ,   ?
-    ,   DEFAULT
-    ,   DEFAULT
-    ,   DEFAULT
-    ,   DEFAULT
+    ,   0
     )
     "
     ,
@@ -114,9 +103,8 @@ $db->query(
     ,   $type
     ,   $date
     ,   $entry_time
-    ,   $break_start
-    ,   $break_finish
     ,   $exit_time
+    ,   $justification
     )
 );
 
