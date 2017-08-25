@@ -39,7 +39,7 @@ $db = Database::getInstance();
 $db->query(
     "
     SELECT
-        COUNT(*)
+        *
     FROM
         tb_cp_timekeeping
     WHERE
@@ -58,7 +58,7 @@ $db->query(
 
 $time = $db->getResults();
 
-if ($time[0] != null) {
+if ($time != null) {
     $response = array(
         'status' => 'failed',
         'msg' => 'É permitido apenas 1 apontamento por dia!'
@@ -95,6 +95,7 @@ $db->query(
     ,   1
     ,   ?
     ,   0
+    ,   ?
     )
     "
     ,
@@ -105,6 +106,7 @@ $db->query(
     ,   $entry_time
     ,   $exit_time
     ,   $justification
+    ,   $_SERVER['REMOTE_ADDR']
     )
 );
 

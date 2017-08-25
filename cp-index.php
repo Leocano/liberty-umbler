@@ -15,13 +15,13 @@ require 'headers/cp-header.php';
 		</div>
 		<div class="col-xs-12">
 			<button data-toggle="modal" data-target="#modal-cp-timekeeping" id="btn-cp-add" type="button" class="btn btn-default">
-				Novo Apontamento
+				Registrar Ponto
 			</button>
 			<button data-toggle="modal" data-target="#modal-cp-report" type="button" class="btn btn-default">
 				Folha de Ponto
 			</button>
 			<button data-toggle="modal" data-target="#modal-cp-extra" type="button" class="btn btn-default">
-				Lançar Hora Extra
+				Registrar Hora Extra
 			</button>
 		</div>
 	</div>
@@ -33,13 +33,16 @@ require 'headers/cp-header.php';
 		$db->query(
 			"
 			SELECT
+				time.id_cp,
 				time.type_cp,
 				DATE_FORMAT(time.date_cp_timekeeping, '%d/%m/%Y') as date,
 				time.entry_time,
 				time.exit_time,
 				time.break_start,
 				time.break_end,
-				user.name
+				user.name,
+				time.is_extra,
+				time.justification
 			FROM
 				tb_cp_timekeeping   time,
 				tb_users            user
@@ -68,12 +71,15 @@ require 'headers/cp-header.php';
 								<th>Início do almoço</th>
 								<th>Fim do almoço</th>
 								<th>Saída</th>
+								<th>Hora extra</th>
+								<th>Justificativa</th>
+								<th></th>
 							</thead>
 							<tbody>
 							<?php
 							foreach($results as $result) {
 								?>
-								<tr>
+								<tr id="approve-<?=$result->id_cp?>">
 									<td><?=$result->date?></td>
 									<td><?=$result->name?></td>
 									<td><?=$result->type_cp?></td>
@@ -81,6 +87,24 @@ require 'headers/cp-header.php';
 									<td><?=$result->break_start?></td>
 									<td><?=$result->break_end?></td>
 									<td><?=$result->exit_time?></td>
+									<td>
+										<?php
+											if ($result->is_extra == 1) {
+												echo "Sim";
+											} else {
+												echo "Não";
+											}
+										?>
+									</td>
+									<td><?=$result->justification?></td>
+									<td>
+										<button data-id="<?=$result->id_cp?>" class="btn btn-default btn-approval">
+											Aprovar
+										</button>
+										<!-- <button class="btn btn-default">
+											Excluir
+										</button> -->
+									</td>
 								</tr>
 								<?php
 							}
@@ -111,6 +135,34 @@ require 'scripts/bootstrap-notify.php';
 	$btn_cp_timekeeping = $("#btn-cp-timekeeping");
 	$btn_cp_extra = $("#btn-cp-extra");
 	$btn_cp_report = $("#btn-cp-report");
+	$btn_approve = $(".btn-approval");
+
+	$btn_approve.click(function(event){
+		event.preventDefault();
+		var id_cp = $(this).data('id');
+		$.ajax({
+			type: 'post',
+			url: 'p-cp-aprovar.php',
+			data: {
+				id_cp: id_cp
+			},
+			success: function(response) {
+				response = $.parseJSON(response);
+				$("#approve-" + id_cp).remove();
+				$.notify({
+					// options
+					message: response['msg']
+				},{
+					// settings
+					type: 'success' ,
+					placement: {
+						from: "bottom",
+						align: "right"
+					}
+				});
+			}
+		});
+	});
 
 	$btn_cp_timekeeping.click(function(event){
 		event.preventDefault();
@@ -185,21 +237,8 @@ require 'scripts/bootstrap-notify.php';
 			}
 		});
 	});
+	
 
-	// $btn_cp_report.click(function(event) {
-	// 	event.preventDefault();
-	// 	// location.href = "cp-folha-de-ponto.php;
-	// 	$("#form-cp-report").ajaxSubmit({
-	// 		url: 'p-cp-folha-de-ponto.php',
-	// 		type: 'post',
-	// 		data: {
-	// 			id_user: <?=$user->getIdUser()?>
-	// 		},
-	// 		success: function(status) {
-	// 			console.log(status);
-	// 		}
-	// 	});
-	// });
 
 	$( function() {
 		$( ".datepicker" ).datepicker({

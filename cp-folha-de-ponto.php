@@ -32,6 +32,8 @@ $db->query(
         YEAR(time.date_cp_timekeeping) = ?
     AND
         user.id_user = time.id_user
+    AND
+        time.approved = 1
     "
     ,
     array(

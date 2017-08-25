@@ -73,12 +73,12 @@ if ($time[0] != null) {
 
 $hours_worked = ($exit_time - $entry_time) - ($break_finish - $break_start);
 
-$response = array(
-    'status' => 'failed',
-    'msg' => $hours_worked
-);
-echo json_encode($response);
-exit();
+// $response = array(
+//     'status' => 'failed',
+//     'msg' => $hours_worked
+// );
+// echo json_encode($response);
+// exit();
 
 if ($hours_worked > 8) {
     $response = array(
@@ -106,6 +106,7 @@ $db->query(
     ,   DEFAULT
     ,   DEFAULT
     ,   DEFAULT
+    ,   ?
     )
     "
     ,
@@ -117,6 +118,7 @@ $db->query(
     ,   $break_start
     ,   $break_finish
     ,   $exit_time
+    ,   $_SERVER['REMOTE_ADDR']
     )
 );
 
