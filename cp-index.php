@@ -27,9 +27,102 @@ require 'headers/cp-header.php';
 	</div>
 </div>
 
+<?php 
+	$db = Database::getInstance();
+	$db->query(
+		"
+		SELECT
+			time.id_cp,
+			time.type_cp,
+			DATE_FORMAT(time.date_cp_timekeeping, '%d/%m/%Y') as date,
+			time.entry_time,
+			time.exit_time,
+			time.break_start,
+			time.break_end,
+			user.name,
+			time.is_extra,
+			time.justification
+		FROM
+			tb_cp_timekeeping   time,
+			tb_users            user
+		WHERE
+			user.id_user = time.id_user
+		AND
+			MONTH(time.date_cp_timekeeping) = MONTH(CURDATE())
+		AND
+			user.id_user = ?
+		ORDER BY
+			time.date_cp_timekeeping
+		"
+		,
+		array(
+			$user->getIdUser()
+		)
+	);
+
+	$results = $db->getResults();
+?>
+
+<div class="col-xs-12 well well-lg">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 class="h3">CP</h2>
+		</div>
+		<div class="col-xs-12">
+			<div class="table-responsive">
+				<table class="table table-striped table-hover">
+					<thead>
+						<th>Data</th>
+						<th>Nome</th>
+						<th>Tipo</th>
+						<th>Entrada</th>
+						<th>Início do almoço</th>
+						<th>Fim do almoço</th>
+						<th>Saída</th>
+						<th>Hora extra</th>
+						<th>Justificativa</th>
+						<th></th>
+					</thead>
+					<tbody>
+					<?php
+						foreach($results as $result) {
+							?>
+							<tr id="approve-<?=$result->id_cp?>">
+								<td><?=$result->date?></td>
+								<td><?=$result->name?></td>
+								<td><?=$result->type_cp?></td>
+								<td><?=$result->entry_time?></td>
+								<td><?=$result->break_start?></td>
+								<td><?=$result->break_end?></td>
+								<td><?=$result->exit_time?></td>
+								<td>
+									<?php
+										if ($result->is_extra == 1) {
+											echo "Sim";
+										} else {
+											echo "Não";
+										}
+									?>
+								</td>
+								<td><?=$result->justification?></td>
+								<td>
+									<!-- <button data-id="<?=$result->id_cp?>" class="btn btn-default btn-approval">
+										Aprovar
+									</button> -->
+								</td>
+							</tr>
+							<?php
+						}
+					?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php
 	if ($user->checkProfile(array(2, 3))){
-		$db = Database::getInstance();
 		$db->query(
 			"
 			SELECT
