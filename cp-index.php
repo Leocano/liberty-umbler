@@ -118,12 +118,18 @@ require 'headers/cp-header.php';
 								</td>
 								<td><?=$result->justification?></td>
 								<td>
-									<button data-info='<?=json_encode($result)?>' data-id="<?=$result->id_cp?>" class="btn btn-default btn-edit-cp">
-										Editar
-									</button>
-									<button data-id="<?=$result->id_cp?>" class="btn btn-default">
-										Excluir
-									</button>
+									<?php
+										if (($result->is_extra == 1 && $result->approved == 0) || $result->is_extra == 0 ){
+									?>
+										<button data-info='<?=json_encode($result)?>' data-id="<?=$result->id_cp?>" class="btn btn-default btn-edit-cp">
+											Editar
+										</button>
+										<button data-id="<?=$result->id_cp?>" class="btn btn-default">
+											Excluir
+										</button>
+									<?php
+										}
+									?>
 								</td>
 							</tr>
 							<?php
@@ -209,9 +215,6 @@ require 'headers/cp-header.php';
 										<button data-id="<?=$result->id_cp?>" class="btn btn-default btn-approval">
 											Aprovar
 										</button>
-										<!-- <button class="btn btn-default">
-											Excluir
-										</button> -->
 									</td>
 								</tr>
 								<?php
@@ -246,11 +249,11 @@ require 'scripts/bootstrap-notify.php';
 	$btn_cp_report = $("#btn-cp-report");
 	$btn_approve = $(".btn-approval");
 	$btn_edit_cp = $(".btn-edit-cp");
+	$btn_edit_cp_submit = $("#btn-cp-edit-submit");
 
 	$btn_edit_cp.click(function(event){
 		event.preventDefault();
 		var info = $(this).data('info');
-		console.log(info);
 		$("#slt-type-edit").val(info['type_cp']);
 		$("#txt-date-edit").val(info['date']);
 		$("#txt-entry-edit").val(info['entry_time']);
@@ -258,8 +261,20 @@ require 'scripts/bootstrap-notify.php';
 		$("#txt-break-start-edit").val(info['break_start']);
 		$("#txt-break-end-edit").val(info['break_end']);
 		$("#slt-user-edit").selectpicker('val', info['id_user']);
+		$("#txt-id-cp").val(info['id_cp']);
 
 		$("#modal-cp-edit").modal("toggle");
+	});
+
+	$btn_edit_cp_submit.click(function(event) {
+		event.preventDefault();
+		$("#form-cp-edit").ajaxSubmit({
+			type: 'post',
+			url: 'p-cp-editar.php',
+			success: function(response) {
+				console.log(response);
+			}
+		});
 	});
 
 	$btn_approve.click(function(event){

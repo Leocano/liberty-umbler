@@ -6,6 +6,7 @@
             <h4 class="modal-title" id="myModalLabel">CP</h4>
         </div>
         <form name="form-cp-edit" id="form-cp-edit">
+            <input type="hidden" id="txt-id-cp" name="txt-id-cp">
             <div class="modal-body">
                 <?php
                 $dao = new ConsultantDAO;
