@@ -41,7 +41,9 @@ require 'headers/cp-header.php';
 			time.break_end,
 			user.name,
 			time.is_extra,
-			time.justification
+			time.justification,
+			time.approved,
+			user.id_user
 		FROM
 			tb_cp_timekeeping   time,
 			tb_users            user
@@ -69,7 +71,7 @@ require 'headers/cp-header.php';
 			<h2 class="h3">CP</h2>
 		</div>
 		<div class="col-xs-12">
-			<div class="table-responsive">
+			<div class="table-responsive table-responsive-all">
 				<table class="table table-striped table-hover">
 					<thead>
 						<th>Data</th>
@@ -80,6 +82,7 @@ require 'headers/cp-header.php';
 						<th>Fim do almoço</th>
 						<th>Saída</th>
 						<th>Hora extra</th>
+						<th>Aprovada</th>
 						<th>Justificativa</th>
 						<th></th>
 					</thead>
@@ -104,11 +107,23 @@ require 'headers/cp-header.php';
 										}
 									?>
 								</td>
+								<td>
+									<?php
+										if ($result->approved == 1) {
+											echo "<i class='fa fa-check'></i>";
+										} else {
+											echo "<i class='fa fa-exclamation-triangle'></i>";
+										}
+									?>
+								</td>
 								<td><?=$result->justification?></td>
 								<td>
-									<!-- <button data-id="<?=$result->id_cp?>" class="btn btn-default btn-approval">
-										Aprovar
-									</button> -->
+									<button data-info='<?=json_encode($result)?>' data-id="<?=$result->id_cp?>" class="btn btn-default btn-edit-cp">
+										Editar
+									</button>
+									<button data-id="<?=$result->id_cp?>" class="btn btn-default">
+										Excluir
+									</button>
 								</td>
 							</tr>
 							<?php
@@ -172,7 +187,7 @@ require 'headers/cp-header.php';
 							<?php
 							foreach($results as $result) {
 								?>
-								<tr id="approve-<?=$result->id_cp?>">
+								<tr id="adm-approve-<?=$result->id_cp?>">
 									<td><?=$result->date?></td>
 									<td><?=$result->name?></td>
 									<td><?=$result->type_cp?></td>
@@ -216,6 +231,7 @@ require 'headers/cp-header.php';
 require 'modals/cp-apontamento-modal.php';
 require 'modals/cp-relatorio-modal.php';
 require 'modals/cp-extra-modal.php';
+require 'modals/cp-editar-ponto-modal.php';
 require 'scripts/main-script.php';
 require 'scripts/bootstrap-select.php';
 require 'scripts/jquery-ui.php';
@@ -229,6 +245,22 @@ require 'scripts/bootstrap-notify.php';
 	$btn_cp_extra = $("#btn-cp-extra");
 	$btn_cp_report = $("#btn-cp-report");
 	$btn_approve = $(".btn-approval");
+	$btn_edit_cp = $(".btn-edit-cp");
+
+	$btn_edit_cp.click(function(event){
+		event.preventDefault();
+		var info = $(this).data('info');
+		console.log(info);
+		$("#slt-type-edit").val(info['type_cp']);
+		$("#txt-date-edit").val(info['date']);
+		$("#txt-entry-edit").val(info['entry_time']);
+		$("#txt-exit-edit").val(info['exit_time']);
+		$("#txt-break-start-edit").val(info['break_start']);
+		$("#txt-break-end-edit").val(info['break_end']);
+		$("#slt-user-edit").selectpicker('val', info['id_user']);
+
+		$("#modal-cp-edit").modal("toggle");
+	});
 
 	$btn_approve.click(function(event){
 		event.preventDefault();
@@ -241,7 +273,7 @@ require 'scripts/bootstrap-notify.php';
 			},
 			success: function(response) {
 				response = $.parseJSON(response);
-				$("#approve-" + id_cp).remove();
+				$("#adm-approve-" + id_cp).remove();
 				$.notify({
 					// options
 					message: response['msg']
@@ -330,8 +362,6 @@ require 'scripts/bootstrap-notify.php';
 			}
 		});
 	});
-	
-
 
 	$( function() {
 		$( ".datepicker" ).datepicker({

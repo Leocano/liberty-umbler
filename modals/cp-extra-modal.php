@@ -23,7 +23,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Entrada</label>
+                            <label>Início</label>
                             <div class="input-group clockpicker">
                                 <input type="text" class="form-control date-input" name="txt-entry" readonly value="17:00">
                                 <span class="input-group-addon">
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Saída</label>
+                            <label>Fim</label>
                             <div class="input-group clockpicker">
                                 <input type="text" class="form-control date-input" name="txt-exit" readonly>
                                 <span class="input-group-addon">
