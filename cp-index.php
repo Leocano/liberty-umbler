@@ -20,9 +20,9 @@ require 'headers/cp-header.php';
 			<button data-toggle="modal" data-target="#modal-cp-report" type="button" class="btn btn-default">
 				Folha de Ponto
 			</button>
-			<button data-toggle="modal" data-target="#modal-cp-extra" type="button" class="btn btn-default">
+			<!-- <button data-toggle="modal" data-target="#modal-cp-extra" type="button" class="btn btn-default">
 				Registrar Hora Extra
-			</button>
+			</button> -->
 		</div>
 	</div>
 </div>
@@ -39,8 +39,8 @@ require 'headers/cp-header.php';
 			time.exit_time,
 			time.break_start,
 			time.break_end,
+			TIMEDIFF(time.extra_end, extra_start) as diff,
 			user.name,
-			time.is_extra,
 			time.justification,
 			time.approved,
 			user.id_user
@@ -81,7 +81,7 @@ require 'headers/cp-header.php';
 						<th>Início do almoço</th>
 						<th>Fim do almoço</th>
 						<th>Saída</th>
-						<th>Hora extra</th>
+						<th>Horas extras</th>
 						<th>Aprovada</th>
 						<th>Justificativa</th>
 						<th></th>
@@ -98,15 +98,7 @@ require 'headers/cp-header.php';
 								<td><?=$result->break_start?></td>
 								<td><?=$result->break_end?></td>
 								<td><?=$result->exit_time?></td>
-								<td>
-									<?php
-										if ($result->is_extra == 1) {
-											echo "Sim";
-										} else {
-											echo "Não";
-										}
-									?>
-								</td>
+								<td><?=$result->diff?></td>
 								<td>
 									<?php
 										if ($result->approved == 1) {
@@ -155,7 +147,6 @@ require 'headers/cp-header.php';
 				time.break_start,
 				time.break_end,
 				user.name,
-				time.is_extra,
 				time.justification
 			FROM
 				tb_cp_timekeeping   time,
@@ -185,7 +176,6 @@ require 'headers/cp-header.php';
 								<th>Início do almoço</th>
 								<th>Fim do almoço</th>
 								<th>Saída</th>
-								<th>Hora extra</th>
 								<th>Justificativa</th>
 								<th></th>
 							</thead>
@@ -201,15 +191,6 @@ require 'headers/cp-header.php';
 									<td><?=$result->break_start?></td>
 									<td><?=$result->break_end?></td>
 									<td><?=$result->exit_time?></td>
-									<td>
-										<?php
-											if ($result->is_extra == 1) {
-												echo "Sim";
-											} else {
-												echo "Não";
-											}
-										?>
-									</td>
 									<td><?=$result->justification?></td>
 									<td>
 										<button data-id="<?=$result->id_cp?>" class="btn btn-default btn-approval">
@@ -250,6 +231,7 @@ require 'scripts/bootstrap-notify.php';
 	$btn_approve = $(".btn-approval");
 	$btn_edit_cp = $(".btn-edit-cp");
 	$btn_edit_cp_submit = $("#btn-cp-edit-submit");
+	$check_extra = $("#check-extra");
 
 	$btn_edit_cp.click(function(event){
 		event.preventDefault();
@@ -264,6 +246,10 @@ require 'scripts/bootstrap-notify.php';
 		$("#txt-id-cp").val(info['id_cp']);
 
 		$("#modal-cp-edit").modal("toggle");
+	});
+
+	$check_extra.on("click", function(event){
+		$("#extra-fields").toggleClass("hidden");
 	});
 
 	$btn_edit_cp_submit.click(function(event) {
