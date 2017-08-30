@@ -43,7 +43,9 @@ require 'headers/cp-header.php';
 			user.name,
 			time.justification,
 			time.approved,
-			user.id_user
+			user.id_user,
+			time.extra_start,
+			time.extra_end
 		FROM
 			tb_cp_timekeeping   time,
 			tb_users            user
@@ -232,6 +234,7 @@ require 'scripts/bootstrap-notify.php';
 	$btn_edit_cp = $(".btn-edit-cp");
 	$btn_edit_cp_submit = $("#btn-cp-edit-submit");
 	$check_extra = $("#check-extra");
+	$edit_check_extra = $("#edit-check-extra");
 
 	$btn_edit_cp.click(function(event){
 		event.preventDefault();
@@ -244,12 +247,31 @@ require 'scripts/bootstrap-notify.php';
 		$("#txt-break-end-edit").val(info['break_end']);
 		$("#slt-user-edit").selectpicker('val', info['id_user']);
 		$("#txt-id-cp").val(info['id_cp']);
+		if(info['justification'] != null) {
+			$("#edit-check-extra").prop("checked", true).change();
+			$("#txt-edit-extra-start").val(info['extra_start']);
+			$("#txt-edit-extra-end").val(info['extra_end']);
+			$("#txt-edit-justification").val(info['justification']);
+		} else {
+			$("#edit-check-extra").prop("checked", false).change();
+			$("#txt-edit-extra-start").val("");
+			$("#txt-edit-extra-end").val("");
+			$("#txt-edit-justification").val("");
+		}
 
 		$("#modal-cp-edit").modal("toggle");
 	});
 
-	$check_extra.on("click", function(event){
+	$check_extra.on("change", function(event){
 		$("#extra-fields").toggleClass("hidden");
+	});
+
+	$edit_check_extra.on("change", function(event){
+		if ($edit_check_extra.prop('checked') == true) {
+			$("#edit-extra-fields").removeClass("hidden");
+		} else {
+			$("#edit-extra-fields").addClass("hidden");
+		}
 	});
 
 	$btn_edit_cp_submit.click(function(event) {

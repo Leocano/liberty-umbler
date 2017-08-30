@@ -97,6 +97,48 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12 form-group">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="edit-check-extra" name="check-extra">Hora Extra
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="edit-extra-fields" class="hidden">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Início hora extra</label>
+                            <div class="input-group clockpicker">
+                                <input type="text" id="txt-edit-extra-start" class="form-control date-input" name="txt-extra-start" placeholder="Início das horas extras" readonly>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Fim hora extra</label>
+                            <div class="input-group clockpicker">
+                                <input type="text" id="txt-edit-extra-end" class="form-control date-input" name="txt-extra-end" placeholder="Fim das horas extras" readonly>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 form-group">
+                            <label>Justificativa</label>
+                            <textarea class="form-control" id="txt-edit-justification" name="txt-justification" placeholder="Justificativa para as horas extras" rows="6" id="txt-justification"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp; Fechar</button>

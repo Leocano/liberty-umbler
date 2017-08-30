@@ -12,6 +12,11 @@ $break_start = $_POST['txt-break-start'];
 $break_finish = $_POST['txt-break-finish'];
 $id_user = $_POST['id-user'];
 $id_cp = $_POST['txt-id-cp'];
+$extra_start = $_POST['txt-extra-start'];
+$extra_end = $_POST['txt-extra-end'];
+$justification = $_POST['txt-justification'];
+$check_extra = $_POST['check-extra'];
+$approved = 1;
 
 if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time, $break_start, $break_finish, $id_user))) {
     $response = array(
@@ -20,6 +25,22 @@ if (Validator::isEmpty(array($type, $date, $entry_time, $exit_time, $break_start
     );
     echo json_encode($response);
     exit();
+}
+
+if($check_extra == true) {
+    $approved = 0;
+    if (Validator::isEmpty(array($extra_start, $extra_end, $justification))) {
+        $response = array(
+            'status' => 'failed',
+            'msg' => 'Preencha todos os campos!'
+        );
+        echo json_encode($response);
+        exit();
+    }
+} else {
+    $extra_start = '00:00:00';
+    $extra_end = '00:00:00';
+    $justification = null;
 }
 
 $date = str_replace("/", "-", $date);
@@ -82,6 +103,10 @@ $db->query(
         break_end = ?,
         exit_time = ?,
         timekeeping_timestamp = CURRENT_TIMESTAMP,
+        extra_start = ?,
+        extra_end = ?,
+        justification = ?,
+        approved = ?,
         ip_address = ?
     WHERE
         id_cp = ?
@@ -95,6 +120,10 @@ $db->query(
     ,   $break_start
     ,   $break_finish
     ,   $exit_time
+    ,   $extra_start
+    ,   $extra_end
+    ,   $justification
+    ,   $approved
     ,   $_SERVER['REMOTE_ADDR']
     ,   $id_cp
     )
@@ -102,6 +131,6 @@ $db->query(
 
 $response = array(
     'status' => 'success',
-    'msg' => 'Apontamento realizado com sucesso!'
+    'msg' => 'Apontamento editado com sucesso!'
 );
 echo json_encode($response);
