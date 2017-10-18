@@ -64,7 +64,7 @@ $id_profile = $profile->getIdProfile();
                                 }
                                 ?>
                                 <li><a href="p-logout.php"><i class="fa fa-plug"></i>&nbsp;&nbsp;Logout</a></li>
-                                <li><a href="cp-index.php"><i class="fa fa-plug"></i>&nbsp;&nbsp;CP</a></li>
+                                <li><a href="../../cp/cp-index.php"><i class="fa fa-plug"></i>&nbsp;&nbsp;CP</a></li>
                             </ul>
                         </li>
                     </ul>

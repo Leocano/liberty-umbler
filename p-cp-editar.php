@@ -60,35 +60,35 @@ if ($user->checkProfile(array(1)) && $date != Date('Y-m-d')) {
 
 $db = Database::getInstance();
 
-$db->query(
-    "
-    SELECT
-        COUNT(*) as qtd
-    FROM
-        tb_cp_timekeeping
-    WHERE
-        date_cp_timekeeping = ?
-    AND
-        id_user = ?
-    AND
-        is_extra = 0
-    "
-    ,
-    array(
-        $date,
-        $id_user
-    )
-);
-$results = $db->getResults();
+// $db->query(
+//     "
+//     SELECT
+//         COUNT(*) as qtd
+//     FROM
+//         tb_cp_timekeeping
+//     WHERE
+//         date_cp_timekeeping = ?
+//     AND
+//         id_user = ?
+//     AND
+//         is_extra = 0
+//     "
+//     ,
+//     array(
+//         $date,
+//         $id_user
+//     )
+// );
+// $results = $db->getResults();
 
-if ($results[0]->qtd >= 1) {
-    $response = array(
-        'status' => 'failed',
-        'msg' => 'É permitido apenas 1 apontamento por dia!'
-    );
-    echo json_encode($response);
-    exit();
-}
+// if ($results[0]->qtd >= 1) {
+//     $response = array(
+//         'status' => 'failed',
+//         'msg' => 'É permitido apenas 1 apontamento por dia!'
+//     );
+//     echo json_encode($response);
+//     exit();
+// }
 
 $db->query(
     "
@@ -97,7 +97,6 @@ $db->query(
     SET
         id_user = ?,
         type_cp = ?,
-        date_cp_timekeeping = ?,
         entry_time = ?,
         break_start = ?,
         break_end = ?,
@@ -115,7 +114,6 @@ $db->query(
     array(
         $id_user
     ,   $type
-    ,   $date
     ,   $entry_time
     ,   $break_start
     ,   $break_finish

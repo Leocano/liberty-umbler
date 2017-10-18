@@ -1,9 +1,5 @@
 <?php
 
-//init.php
-//  arquivo que deve ser incluido em todos os outros scripts
-// 	@Leonardo Cano
-
 //Vetor com as configurações basicas do sistema
 $GLOBALS['config'] = array(
 	'mysql' => array(
