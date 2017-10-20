@@ -1042,4 +1042,82 @@ class TicketDAO{
 
 		return $db->getResults();
 	}
+
+	public function createNewTicketProducts($priority, $subject, $desc, $id_company, $creator, $product) {
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+			INSERT INTO
+				tb_product_tickets
+			VALUES
+			(
+				null,
+				?,
+				?,
+				DEFAULT,
+				?,
+				?,
+				DEFAULT,
+				CURRENT_TIMESTAMP,
+				?,
+				?,
+				null
+			)
+			",
+			array(
+				$creator,
+				$priority,
+				$id_company,
+				$product,
+				$subject,
+				$desc
+			)
+		);
+	}
+
+	public function getProductTicketById($id) {
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+				SELECT
+					tick.*
+				,	DATE_FORMAT(tick.creation_date, '%d/%m/%Y %H:%i:%s') as created
+				,	user.name
+				,	prio.*
+				,	stat.*
+				,	comp.*
+				,	prod.*
+				,	prop.*
+				FROM
+					tb_product_tickets	tick
+				,	tb_users			user
+				,	tb_priority			prio
+				,	tb_status			stat
+				,	tb_companies		comp
+				,	tb_products			prod
+				,	tb_proposal			prop
+				WHERE
+					tick.id_ticket = ?
+				AND
+					user.id_user = tick.id_creator
+				AND
+					prio.id_priority = tick.id_priority
+				AND
+					stat.id_status = tick.id_status
+				AND
+					comp.id_company = tick.id_company
+				AND
+					prod.id_product = tick.id_product
+				AND
+					prop.id_proposal = tick.id_proposal
+			",
+			array(
+				$id
+			)
+		);
+
+		return $db->getResults();
+	}
 }

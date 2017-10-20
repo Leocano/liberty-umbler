@@ -57,4 +57,21 @@ class AttachmentDAO{
 						array($id)
 						);
 	}
+
+	public function createProductAttachment($path, $ticketId, $name) {
+		$db = Database::getInstance();
+		
+			$db->query("INSERT INTO 
+							tb_products_attachments
+						VALUES
+						(
+							null 
+						,	?
+						,	?
+						,	?
+						)"
+						,
+						array($ticketId, $path, $name)
+						);
+	}
 }

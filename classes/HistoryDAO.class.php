@@ -42,4 +42,23 @@ class HistoryDAO{
 
 		return $db->getResults();
 	}
+
+	public function insertHistoryProduct($id_ticket, $id_user, $desc_history){
+		$db = Database::getInstance();
+
+		$db->query("INSERT INTO
+							tb_history_products
+						VALUES
+						(
+							null 
+						,	?
+						,	?
+						,	?
+						,	DEFAULT
+						)
+						"
+						,
+						array($id_ticket, $id_user, $desc_history)
+						);
+	}
 }
