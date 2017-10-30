@@ -16,6 +16,7 @@ class UserConsultant extends User{
 
 		$_SESSION['user'] = $this;
 		$_SESSION['loggedIn'] = true;
+		$_SESSION['reminder'] = true;
 		Redirect::to("home.php");
 	}
 

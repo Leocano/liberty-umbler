@@ -6,6 +6,33 @@ $id_user = $user->getIdUser();
 require 'scripts/main-script.php';
 require 'scripts/datatable.php';
 
+
+if ($_SESSION['reminder'] == true) {
+	$db->query(
+		"
+		SELECT
+			*
+		FROM
+			tb_cp_timekeeping
+		WHERE
+			id_user = ?
+		AND
+			DATE(entry_time) = DATE_ADD(CURDATE(), INTERVAL -1 DAY)
+		",
+		array(
+			$user->getIdUser()
+		)
+	);
+	$results = $db->getResults();
+	if ($results == null) {
+		$show_popup = true;
+	} else {
+		$show_popup = false;
+	}
+}
+
+$_SESSION['reminder'] = false;
+
 ?>
 
 <div class="row">
@@ -25,6 +52,11 @@ require 'scripts/datatable.php';
 			?>
 			<li><a data-toggle="tab" href="#all-tickets">Todos os Chamados</a></li>
 			<?php 
+			}
+			if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
+				?>
+				<li><a data-toggle="tab" href="#product-tickets">Produtos</a></li>
+				<?php 
 			}
 			?>
 		</ul>
@@ -230,6 +262,7 @@ require 'scripts/datatable.php';
 }
 require 'modals/company-info-modal.php';
 require 'modals/customer-info-modal.php';
+require 'modals/reminder-modal.php';
 ?>
 
 </div> <!-- //content // -->
@@ -245,6 +278,14 @@ require 'modals/customer-info-modal.php';
         "pageLength": 100 ,
         "responsive": true
     });
+
+	<?php
+	if ($show_popup == true){
+		?>
+		$("#modal-reminder").modal('show');
+		<?php 
+	}
+	?>
 
     $toggleInfoCustomer = $(".info-toggle-customer");
 	$toggleInfoCompany = $(".info-toggle-company");
