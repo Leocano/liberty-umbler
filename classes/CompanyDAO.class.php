@@ -130,4 +130,13 @@ class CompanyDAO{
 					array($name, $is_customer, $email, $address, $phone, $cellphone, $city, $bairro, $cep, $contato_principal, $id)
 					);
 	}
+
+	public function getProductCompanies(){
+		$db = Database::getInstance();
+
+		$db->query("SELECT * FROM tb_product_companies ORDER BY name_company ASC");
+		$companies = $db->getResults();
+
+		return $companies;
+	}
 }

@@ -27,7 +27,6 @@ if($user->checkProfile(array(5))){
                 $products = $dao->getAllProducts();
 
                 foreach ($products as $product) {
-
                     ?>
                     <option value="<?=$product->id_product?>" ><?=$product->name_product?></option>
                     <?php
@@ -59,7 +58,7 @@ if($user->checkProfile(array(5))){
 			<select required data-title="Selecione uma empresa" class="selectpicker form-control" id="slt-company" name="slt-company" data-live-search="true">
 				<?php
 				$dao = new CompanyDAO;
-				$companies = $dao->getAllCompanies();
+				$companies = $dao->getProductCompanies();
 
 				foreach ($companies as $company) {
 					?>

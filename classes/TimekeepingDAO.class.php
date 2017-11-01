@@ -81,6 +81,12 @@ class TimekeepingDAO{
 
 		$db->query("DELETE FROM tb_timekeeping WHERE id_timekeeping = ?", array($id));
 	}
+	
+	public function deleteTimekeepingProduct($id){
+		$db = Database::getInstance();
+
+		$db->query("DELETE FROM tb_product_timekeeping WHERE id_timekeeping = ?", array($id));
+	}
 
 	public function updateTimekeeping($timekeeping){
 		$db = Database::getInstance();
@@ -127,6 +133,30 @@ class TimekeepingDAO{
 		$db = Database::getInstance();
 
 		$db->query("SELECT date_timekeeping FROM tb_timekeeping WHERE id_timekeeping = ?", array($id_timekeeping));
+
+		return $db->getResults();
+	}
+	
+	public function getTimekeepingByProductTicketId($ticket_id){
+		$db = Database::getInstance();
+
+		$db->query("SELECT 
+						time.* 
+					,	DATE_FORMAT(time.date_timekeeping, '%d/%m/%Y') as new_date_timekeeping
+					,	user.name
+					FROM 
+						tb_product_timekeeping 			time
+					,	tb_users				user
+					WHERE
+						time.id_ticket = ?
+					AND
+						time.id_user = user.id_user
+					ORDER BY 
+						id_timekeeping ASC
+					"
+					,
+					array($ticket_id)
+					);
 
 		return $db->getResults();
 	}

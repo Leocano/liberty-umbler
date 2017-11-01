@@ -74,6 +74,31 @@ class ConsultantDAO extends UserDAO{
 
 		return $consultants;
 	}
+	
+		public function getProductConsultants(){
+			$db = Database::getInstance();
+	
+			$db->query("SELECT 
+							user.id_user
+						,	user.name
+						,	user.email
+						,	user.active
+						,	user.role
+						,	prof.desc_profile
+						FROM
+							tb_users					user
+						,	tb_profiles					prof
+						WHERE
+							id_user_type = 1
+						AND
+							user.id_profile = prof.id_profile
+						AND
+							user.area_user = 5
+						");
+			$consultants = $db->getResults();
+	
+			return $consultants;
+		}
 
 	public function searchConsultant($search){
 		$db = Database::getInstance();
@@ -177,6 +202,26 @@ class ConsultantDAO extends UserDAO{
 					FROM
 						tb_users user
 					,	tb_assigned_users_tickets assi
+					WHERE
+						assi.id_user = user.id_user
+					AND
+						assi.id_ticket = ?
+					"
+					,
+					array($id_ticket)
+					);
+
+		return $db->getResults();
+	}
+
+	public function getUsersByProductTicket($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query("SELECT
+						user.*
+					FROM
+						tb_users user
+					,	tb_product_assignments assi
 					WHERE
 						assi.id_user = user.id_user
 					AND

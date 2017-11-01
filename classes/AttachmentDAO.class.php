@@ -74,4 +74,20 @@ class AttachmentDAO{
 						array($ticketId, $path, $name)
 						);
 	}
+	
+	public function getAttachmentsByProductTicketId($id){
+		$db = Database::getInstance();
+
+		$db->query("SELECT 
+						*
+					FROM
+						tb_products_attachments
+					WHERE 
+						id_ticket = ?"
+					,
+					array($id)
+					);
+
+		return $db->getResults();
+	}
 }

@@ -468,6 +468,33 @@ class TicketDAO{
 					);
 		}
 	}
+	
+	public function changeStatusProduct($id, $status){
+		$db = Database::getInstance();
+
+		if ($status == 2) {
+			$db->query("UPDATE
+							tb_product_tickets
+						SET
+							id_status = ?
+						,	date_closed = CURRENT_TIMESTAMP
+						WHERE 
+							id_ticket = ?"
+						,
+						array($status, $id)
+						);
+		} else {
+			$db->query("UPDATE
+						tb_product_tickets
+					SET
+						id_status = ?
+					WHERE 
+						id_ticket = ?"
+					,
+					array($status, $id)
+					);
+		}
+	}
 
 	public function getAssignedTickets($id){
 		$db = Database::getInstance();
@@ -1082,20 +1109,20 @@ class TicketDAO{
 		$db->query(
 			"
 				SELECT
-					tick.*
-				,	DATE_FORMAT(tick.creation_date, '%d/%m/%Y %H:%i:%s') as created
+					DATE_FORMAT(tick.creation_date, '%d/%m/%Y %H:%i:%s') as created
 				,	user.name
 				,	prio.*
 				,	stat.*
 				,	comp.*
 				,	prod.*
 				,	prop.*
+				,	tick.*
 				FROM
 					tb_product_tickets	tick
 				,	tb_users			user
 				,	tb_priority			prio
 				,	tb_status			stat
-				,	tb_companies		comp
+				,	tb_product_companies	comp
 				,	tb_products			prod
 				,	tb_proposal			prop
 				WHERE
@@ -1117,6 +1144,85 @@ class TicketDAO{
 				$id
 			)
 		);
+
+		return $db->getResults();
+	}
+
+	public function getAllOpenProductTickets(){
+		$db = Database::getInstance();
+
+		$db->query("SELECT
+						tick.*
+					,	REPLACE(DATE_FORMAT(tick.creation_date, '%d/%m/%Y às %T'), '-', '/') as created
+					,	user.*
+					,	prio.*
+					,	stat.*
+					,	prod.*
+					,	comp.*
+					FROM
+						tb_product_tickets		tick
+					,	tb_users				user
+					,	tb_priority				prio
+					,	tb_status				stat
+					,	tb_product_companies	comp
+					,	tb_products				prod
+					WHERE
+						tick.id_creator = user.id_user
+					AND
+						tick.id_priority = prio.id_priority
+					AND
+						tick.id_status = stat.id_status
+					AND 
+						tick.id_company = comp.id_company
+					AND
+						prod.id_product = tick.id_product
+					AND
+						tick.id_status != 2
+					ORDER BY
+						id_ticket DESC"
+					);
+
+		return $db->getResults();
+	}
+
+	public function getAllAssignedProductTickets(){
+		$db = Database::getInstance();
+
+		$db->query("SELECT
+						tick.*
+					,	REPLACE(DATE_FORMAT(tick.creation_date, '%d/%m/%Y às %T'), '-', '/') as created
+					,	user.*
+					,	prio.*
+					,	stat.*
+					,	prod.*
+					,	comp.*
+					FROM
+						tb_product_tickets		tick
+					,	tb_users				user
+					,	tb_priority				prio
+					,	tb_status				stat
+					,	tb_product_companies	comp
+					,	tb_products				prod
+					,	tb_product_assignments	assi
+					WHERE
+						tick.id_creator = user.id_user
+					AND
+						tick.id_priority = prio.id_priority
+					AND
+						tick.id_status = stat.id_status
+					AND 
+						tick.id_company = comp.id_company
+					AND
+						prod.id_product = tick.id_product
+					AND
+						tick.id_status != 2
+					AND
+						assi.id_user = user.id_user
+					AND
+						assi.id_ticket = tick.id_ticket
+					ORDER BY
+						id_ticket DESC"
+					);
 
 		return $db->getResults();
 	}

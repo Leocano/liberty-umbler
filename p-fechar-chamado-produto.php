@@ -15,12 +15,12 @@ $id_creator = $json_ticket[0]->id_creator;
 $status = $_POST['status'];
 
 if($_POST['disabled'] == "disabled"){
-	Redirect::to("visualizar-chamado.php?id=" . $id);
+	Redirect::to("visualizar-chamado-produto.php?id=" . $id);
 }
 
 $dao = new TicketDAO;
 
-$dao->changeStatus($id, $status);
+$dao->changeStatusProduct($id, $status);
 $sent_mail = $dao->getSentMail($id, $id_creator);
 
 // if ($sent_mail[0]->sent_mail == 0 && $sent_mail[0]->active == 1){
@@ -31,6 +31,6 @@ $dao->emailSent($id);
 
 $id_user = $_SESSION['user']->getIdUser();
 $dao = new HistoryDAO;
-$dao->insertHistory($id, $id_user, "Chamado fechado por");
+$dao->insertHistoryProduct($id, $id_user, "Chamado fechado por");
 
-Redirect::to("visualizar-chamado.php?id=" . $id);
+// Redirect::to("visualizar-chamado-produto.php?id=" . $id);

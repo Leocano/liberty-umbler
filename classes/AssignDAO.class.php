@@ -24,12 +24,53 @@ class AssignDAO{
 		}
 	}
 
+	public function assignConsultantProduct($id_ticket, $id_users = array()){
+		$db = Database::getInstance();
+
+		// $db->query("DELETE FROM tb_assigned_users_tickets WHERE id_ticket = ?", array($id_ticket));
+
+		foreach ($id_users as $user) {
+			// $db->query("INSERT IGNORE INTO
+			$db->query("INSERT INTO
+						tb_product_assignments
+					VALUES
+					(
+						?
+					,	?
+					,	DEFAULT
+					,	0
+					)
+					"
+					,
+					array($id_ticket, $user)
+					);
+		}
+	}
+
 	public function deleteAllParticipants($id_ticket){
 		$db = Database::getInstance();
 
 		$db->query("
 			DELETE FROM
 				tb_assigned_users_tickets
+			WHERE
+				id_ticket = ?
+			AND
+				main = 0
+			"
+			,
+			array(
+				$id_ticket
+			)
+		);
+	}
+	
+	public function deleteAllParticipantsProduct($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query("
+			DELETE FROM
+				tb_product_assignments
 			WHERE
 				id_ticket = ?
 			AND
@@ -48,6 +89,26 @@ class AssignDAO{
 		$db->query("
 			DELETE FROM
 				tb_assigned_users_tickets
+			WHERE
+				id_ticket = ?
+			AND
+				main = 1
+			AND
+				id_user != $id_main
+			"
+			,
+			array(
+				$id_ticket
+			)
+		);
+	}
+	
+	public function deleteMainConsultantProduct($id_ticket, $id_main){
+		$db = Database::getInstance();
+
+		$db->query("
+			DELETE FROM
+				tb_product_assignments
 			WHERE
 				id_ticket = ?
 			AND
@@ -82,6 +143,27 @@ class AssignDAO{
 					)
 		);
 	}
+	
+	public function deleteOldConsultantsProduct($id_ticket, $id_users = array()){
+		$db = Database::getInstance();
+
+		$id_users = implode(",", $id_users);
+
+		$db->query("DELETE FROM
+						tb_product_assignments
+					WHERE
+						id_ticket = ?
+					AND 
+						id_user NOT IN(" . $id_users . ")
+					AND
+						main = 0
+					"
+					,
+					array(
+						$id_ticket
+					)
+		);
+	}
 
 	public function assignMainConsultant($id_ticket, $id_user){
 		$db = Database::getInstance();
@@ -91,6 +173,27 @@ class AssignDAO{
 		// $db->query("INSERT IGNORE INTO
 		$db->query("INSERT INTO
 					tb_assigned_users_tickets
+				VALUES
+				(
+					?
+				,	?
+				,	1
+				,	0
+				)
+				"
+				,
+				array($id_ticket, $id_user)
+				);
+	}
+	
+	public function assignMainConsultantProduct($id_ticket, $id_user){
+		$db = Database::getInstance();
+
+		// $db->query("DELETE FROM tb_assigned_users_tickets WHERE id_ticket = ?", array($id_ticket));
+
+		// $db->query("INSERT IGNORE INTO
+		$db->query("INSERT INTO
+					tb_product_assignments
 				VALUES
 				(
 					?
@@ -113,6 +216,30 @@ class AssignDAO{
 					,	user.id_user
 					FROM
 						tb_assigned_users_tickets	tick
+					,	tb_users 					user
+					WHERE
+						id_ticket = ?
+					AND 
+						tick.id_user = user.id_user
+					AND 
+						tick.main    = 0
+					"
+					,
+					array($id_ticket)
+					);
+
+		return $db->getResults();
+	}
+	
+	public function getAssignedByTicketProduct($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query("SELECT 
+						tick.*
+					,	user.name
+					,	user.id_user
+					FROM
+						tb_product_assignments	tick
 					,	tb_users 					user
 					WHERE
 						id_ticket = ?
@@ -151,6 +278,30 @@ class AssignDAO{
 
 		return $db->getResults();
 	}
+	
+	public function getMainConsultantProduct($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query("SELECT 
+						tick.*
+					,	user.name
+					,	user.id_user
+					FROM
+						tb_product_assignments		tick
+					,	tb_users 					user
+					WHERE
+						id_ticket = ?
+					AND 
+						tick.id_user = user.id_user
+					AND
+						tick.main = 1
+					"
+					,
+					array($id_ticket)
+					);
+
+		return $db->getResults();
+	}
 
 	public function getEmailsByUserId($id_user = array()){
 		$db = Database::getInstance();
@@ -163,6 +314,28 @@ class AssignDAO{
 					FROM
 						tb_users 		user
 					,	tb_assigned_users_tickets	assi
+					WHERE
+						user.id_user IN (" . $id_user . ")
+					AND
+						assi.sent = 0
+					AND
+						assi.id_user = user.id_user
+					"
+					);
+		return $db->getResults();
+	}
+	
+	public function getEmailsByUserIdProduct($id_user = array()){
+		$db = Database::getInstance();
+
+		$id_user = implode(",", $id_user);
+
+		$db->query("SELECT
+						user.name
+					,	user.email
+					FROM
+						tb_users 		user
+					,	tb_product_assignments	assi
 					WHERE
 						user.id_user IN (" . $id_user . ")
 					AND
@@ -255,6 +428,42 @@ class AssignDAO{
 
 		return $db->getResults();
 	}
+	
+	public function getLockedParticipantsProduct($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+				SELECT
+					user.id_user
+				FROM
+					tb_users user
+				,	tb_timekeeping			time
+				,	tb_products_assignemnts	assi
+				,	tb_product_tickets 		tick
+				WHERE
+					user.id_user = time.id_user
+				AND
+					assi.id_user = user.id_user
+				AND
+					tick.id_ticket = assi.id_ticket
+				AND
+					tick.id_ticket = time.id_ticket
+				AND
+					time.id_ticket = ?
+				AND
+					assi.main = 0
+				GROUP BY
+					user.id_user
+			"
+			,	
+			array(
+				$id_ticket
+			)
+		);
+
+		return $db->getResults();
+	}
 
 	public function getLockedMain($id_ticket){
 		$db = Database::getInstance();
@@ -268,6 +477,42 @@ class AssignDAO{
 				,	tb_timekeeping	time
 				,	tb_assigned_users_tickets	assi
 				,	tb_tickets 		tick
+				WHERE
+					user.id_user = time.id_user
+				AND
+					assi.id_user = user.id_user
+				AND
+					tick.id_ticket = assi.id_ticket
+				AND
+					tick.id_ticket = time.id_ticket
+				AND
+					time.id_ticket = ?
+				AND
+					assi.main = 1
+				GROUP BY
+					user.id_user
+			"
+			,	
+			array(
+				$id_ticket
+			)
+		);
+
+		return $db->getResults();
+	}
+	
+	public function getLockedMainProduct($id_ticket){
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+				SELECT
+					user.id_user
+				FROM
+					tb_users user
+					,	tb_timekeeping	time
+					,	tb_assigned_users_tickets	assi
+					,	tb_tickets 		tick
 				WHERE
 					user.id_user = time.id_user
 				AND
