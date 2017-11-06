@@ -68,7 +68,7 @@ if (isset($id_user)){
 	$dao->updateSent($main_array);
 }
 
-// include 'mail/mail-atribuir-chamado.php';
+include 'mail/mail-atribuir-chamado-produto.php';
 
 $id_user = $_SESSION['user']->getIdUser();
 $dao = new HistoryDAO;
