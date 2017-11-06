@@ -278,7 +278,7 @@ $_SESSION['reminder'] = false;
 // if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
 	
 	$dao = new TicketDAO;
-	$tickets = $dao->getAllAssignedProductTickets();
+	$tickets = $dao->getAllAssignedProductTickets($user->getIdUser());
 	?>
 	<div id="assigned-product-tickets" class="tab-pane fade">
 

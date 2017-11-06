@@ -1185,7 +1185,7 @@ class TicketDAO{
 		return $db->getResults();
 	}
 
-	public function getAllAssignedProductTickets(){
+	public function getAllAssignedProductTickets($id){
 		$db = Database::getInstance();
 
 		$db->query("SELECT
@@ -1205,8 +1205,6 @@ class TicketDAO{
 					,	tb_products				prod
 					,	tb_product_assignments	assi
 					WHERE
-						tick.id_creator = user.id_user
-					AND
 						tick.id_priority = prio.id_priority
 					AND
 						tick.id_status = stat.id_status
@@ -1220,8 +1218,13 @@ class TicketDAO{
 						assi.id_user = user.id_user
 					AND
 						assi.id_ticket = tick.id_ticket
+					AND
+						user.id_user = ?
 					ORDER BY
-						id_ticket DESC"
+						id_ticket DESC",
+						array(
+							$id
+						)
 					);
 
 		return $db->getResults();
