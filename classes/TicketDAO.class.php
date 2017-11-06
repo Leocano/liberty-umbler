@@ -1229,4 +1229,46 @@ class TicketDAO{
 
 		return $db->getResults();
 	}
+
+	public function getMyOpenProductTickets($id_user) {
+		$db = Database::getInstance();
+		
+		$db->query("SELECT
+						tick.*
+					,	REPLACE(DATE_FORMAT(tick.creation_date, '%d/%m/%Y às %T'), '-', '/') as created
+					,	user.*
+					,	prio.*
+					,	stat.*
+					,	prod.*
+					,	comp.*
+					FROM
+						tb_product_tickets		tick
+					,	tb_users				user
+					,	tb_priority				prio
+					,	tb_status				stat
+					,	tb_product_companies	comp
+					,	tb_products				prod
+					WHERE
+						user.id_user = tick.id_creator
+					AND
+						tick.id_priority = prio.id_priority
+					AND
+						tick.id_status = stat.id_status
+					AND 
+						tick.id_company = comp.id_company
+					AND
+						prod.id_product = tick.id_product
+					AND
+						tick.id_status != 2
+					AND
+						user.id_user = ?
+					ORDER BY
+						id_ticket DESC",
+						array(
+							$id_user
+						)
+					);
+
+		return $db->getResults();
+	}
 }
