@@ -7,8 +7,14 @@
 			</div>
             <form name="form-timekeep" id="form-timekeep">
 				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-12 form-group">
+							<label>Data *</label>
+							<input class="datepicker date-input form-control" name="txt-date" type="text">
+						</div>
+					</div>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 form-group">
                             <label>Descrição *</label>
                             <textarea class="form-control" id="txt-desc" name="txt-desc" placeholder="Descreva as atividades realizadas"></textarea>
                         </div>
@@ -62,6 +68,12 @@
 			</div>
 			<form name="form-edit-timekeep" id="form-edit-timekeep">
 				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-12 form-group">
+							<label>Data *</label>
+							<input class="datepicker date-input form-control" id="txt-date-edit" name="txt-date" type="text">
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<label>Descrição *</label>

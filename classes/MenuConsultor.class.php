@@ -2,6 +2,6 @@
 
 class MenuConsultor extends Menu{
 	function buildMenu(){
-		require "menus/menuConsultor.html";
+		require "menus/menuConsultor.php";
 	}
 }

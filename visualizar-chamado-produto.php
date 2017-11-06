@@ -208,28 +208,24 @@ $timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
 								<?php 
 								$new_dao = new UserDAO;
 								$area_id = $new_dao->getUserAreaId($id_user);
-								if ($user->checkProfile(array(3, 2)) || $area_id[0]->area_user == 2){
-									if ($user->checkProfile(array(3, 2))){
-								?>
-								<a href="editar-chamado-produto.php?id=<?=$id_ticket?>&token=<?=$_SESSION['token']?>" class="btn btn-default <?=$ticket[0]->disabled?>">
-									<i class="fa fa-pencil"></i>
-									&nbsp;Editar
-								</a>
-								<?php
-								}
-								?>
-								<button class="btn btn-default <?=$ticket[0]->disabled?>" <?=$no_assign?> <?=$ticket[0]->disabled?> data-toggle="modal" data-target="#modal-atribute">
-									<i class="fa fa-user-plus"></i>
-									&nbsp;Atribuir
-								</button>
-								<?php 
+								if ($user->checkProfile(array(3, 2)) || $area_id[0]->area_user == 5){
+									?>
+									<a href="editar-chamado-produto.php?id=<?=$id_ticket?>&token=<?=$_SESSION['token']?>" class="btn btn-default <?=$ticket[0]->disabled?>">
+										<i class="fa fa-pencil"></i>
+										&nbsp;Editar
+									</a>
+									<button class="btn btn-default <?=$ticket[0]->disabled?>" <?=$no_assign?> <?=$ticket[0]->disabled?> data-toggle="modal" data-target="#modal-atribute">
+										<i class="fa fa-user-plus"></i>
+										&nbsp;Atribuir
+									</button>
+									<?php 
 									if ($ticket[0]->disabled == "disabled" && $user->checkProfile(array(2, 3))){
 										?>
-								<a class="btn btn-default" href="p-reabrir-chamado-produto.php?id=<?=$id_ticket?>&status=1&token=<?=$_SESSION['token']?>">
-									<i class="fa fa-unlock"></i>
-									&nbsp;Reabrir Chamado
-								</a>
-								<?php
+										<a class="btn btn-default" href="p-reabrir-chamado-produto.php?id=<?=$id_ticket?>&status=1&token=<?=$_SESSION['token']?>">
+											<i class="fa fa-unlock"></i>
+											&nbsp;Reabrir Chamado
+										</a>
+										<?php
 									}
 								}
 							?>
@@ -788,6 +784,7 @@ require 'scripts/jquery-ui.php';
 			$('.edit-select').selectpicker('val', $(this).data('name'));
 			$("#slt-type-edit").val($(this).data('type'));
 			$("#datepicker-id").val($(this).data('date'));
+			$("#txt-date-edit").val($(this).data('date'));
 			$("#txt-hours-edit").val($(this).data('hours'));
 			$("#txt-minutes-edit").val($(this).data('minutes'));
 			$("#txt-cost-edit").val($(this).data('cost'));
@@ -926,29 +923,11 @@ require 'scripts/jquery-ui.php';
 			console.log(id_profile);
 
 
-			if (id_profile == 1) {
-				$(".datepicker").datepicker({
-					stepMonths: 0,
-					<?php 
-				if (Date('N') == 1){
-					echo "minDate: '-6',";
-				} else {
-					echo "minDate: '-1',";
-				}
-				?>
-					maxDate: 0,
-					yearRange: "-1:+0",
-					changeMonth: true,
-					changeYear: true
-				});
-			} else {
-				$(".datepicker").datepicker({
-					yearRange: "-1:+0",
-					changeMonth: true,
-					changeYear: true
-				});
-			}
-
+			$(".datepicker").datepicker({
+				yearRange: "-1:+0",
+				changeMonth: true,
+				changeYear: true
+			});
 
 			$.datepicker.regional['pt-BR'] = {
 				closeText: 'Fechar',

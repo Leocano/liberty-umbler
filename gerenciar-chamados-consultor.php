@@ -53,9 +53,14 @@ $_SESSION['reminder'] = false;
 			<li><a data-toggle="tab" href="#all-tickets">Todos os Chamados</a></li>
 			<?php 
 			}
+			// if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
+				?>
+				<li><a data-toggle="tab" href="#assigned-product-tickets">Meus chamados - Produtos</a></li>
+				<?php 
+			// }
 			if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
 				?>
-				<li><a data-toggle="tab" href="#product-tickets">Produtos</a></li>
+				<li><a data-toggle="tab" href="#product-tickets">Todos os chamados - Produtos</a></li>
 				<?php 
 			}
 			?>
@@ -256,10 +261,231 @@ $_SESSION['reminder'] = false;
 			</div>
 		</div>
 	</div>
-</div>
 
 <?php 
 }
+
+
+
+
+
+
+
+
+
+
+
+// if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
+	
+	$dao = new TicketDAO;
+	$tickets = $dao->getAllAssignedProductTickets();
+	?>
+	<div id="assigned-product-tickets" class="tab-pane fade">
+
+		<div class="row">
+			<div class="col-xs-12 subtitle">
+				<h2 class="h3">Chamados - Produtos</h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="table-responsive">
+					<table class="table table-striped table-hover table-condensed data-table" width="100%">
+						<thead>
+							<th>ID</th>
+							<th>Assunto</th>
+							<th>Criado por</th>
+							<th>Empresa</th>
+							<th>Produto</th>
+							<th>Atribuído a</th>
+							<th>Prioridade</th>
+							<th>Status</th>
+							<th>Criado em</th>
+						</thead>
+						<tbody>
+							<?php 
+							foreach ($tickets as $ticket) {
+								$read = null;
+								//Verificar consultores já atribuidos
+								$dao = new AssignDAO;
+								$assigned = $dao->getAssignedByTicketProduct($ticket->id_ticket);
+								$main = $dao->getMainconsultantProduct($ticket->id_ticket);
+								if ($main == null && $ticket->id_category != 8){
+									$read = "ticket-read";
+								} else {
+									$read = "";
+								}
+								?>
+								<tr class="<?=$read?>">
+									<td><a href="visualizar-chamado-produto.php?id=<?=$ticket->id_ticket?>&token=<?=$_SESSION['token']?>"><?=$ticket->id_ticket?></a></td>
+									<td><a href="visualizar-chamado-produto.php?id=<?=$ticket->id_ticket?>&token=<?=$_SESSION['token']?>"><?=$ticket->subject_ticket?></a></td>
+									<td>
+										<a data-toggle="modal" data-target="#modal-customer" class="info-toggle info-toggle-customer" href="#" data-company="<?=$ticket->company?>" data-name="<?=$ticket->name?>" data-email="<?=$ticket->email?>" data-alt-email="<?=$ticket->alternative_email?>" data-phone="<?=$ticket->phone?>" data-role="<?=$ticket->role?>">
+											<?=$ticket->name?> 
+										</a>
+									</td>
+									<td>
+										<?=$ticket->name_company?>
+									</td>
+									<td><?=$ticket->name_product?></td>
+									<td>
+										<?php
+
+												if ($main == null){
+													echo "<b><i>Não atribuído</i></b>";
+												} else if($assigned != null) {
+													?>
+													<a data-toggle="collapse" href="#collapse-<?=$idx?>">
+														<strong><?=$main[0]->name?></strong>
+														<span class="caret"></span>
+													</a>
+													<br>
+													<?php
+												} else {
+													?>
+													<strong><?=$main[0]->name?></strong>
+													<?php
+												}
+
+												echo '<div class="collapse" id="collapse-' . $idx . '">';
+												foreach ($assigned as $assign) {
+													echo $assign->name . "<br>";
+												}
+												echo "</div>";
+												$idx++;
+											
+										?>
+									</td>
+									<td class="<?=$ticket->color?>">
+										<i class="fa fa-exclamation-circle"></i>&nbsp; <?=$ticket->desc_priority?> 
+									</td>
+									<td><?=$ticket->desc_status?></td>
+									<td><?=$ticket->created?></td>
+								</tr>
+								<?php
+							}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+if ($user->checkProfile(array(2, 3)) || $id_area[0]->area_user == 5) {
+	
+	$dao = new TicketDAO;
+	$tickets = $dao->getAllOpenProductTickets();
+	?>
+	<div id="product-tickets" class="tab-pane fade">
+
+		<div class="row">
+			<div class="col-xs-12 subtitle">
+				<h2 class="h3">Chamados - Produtos</h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="table-responsive">
+					<table class="table table-striped table-hover table-condensed data-table" width="100%">
+						<thead>
+							<th>ID</th>
+							<th>Assunto</th>
+							<th>Criado por</th>
+							<th>Empresa</th>
+							<th>Produto</th>
+							<th>Atribuído a</th>
+							<th>Prioridade</th>
+							<th>Status</th>
+							<th>Criado em</th>
+						</thead>
+						<tbody>
+							<?php 
+							foreach ($tickets as $ticket) {
+								$read = null;
+								//Verificar consultores já atribuidos
+								$dao = new AssignDAO;
+								$assigned = $dao->getAssignedByTicketProduct($ticket->id_ticket);
+								$main = $dao->getMainconsultantProduct($ticket->id_ticket);
+								if ($main == null && $ticket->id_category != 8){
+									$read = "ticket-read";
+								} else {
+									$read = "";
+								}
+								?>
+								<tr class="<?=$read?>">
+									<td><a href="visualizar-chamado-produto.php?id=<?=$ticket->id_ticket?>&token=<?=$_SESSION['token']?>"><?=$ticket->id_ticket?></a></td>
+									<td><a href="visualizar-chamado-produto.php?id=<?=$ticket->id_ticket?>&token=<?=$_SESSION['token']?>"><?=$ticket->subject_ticket?></a></td>
+									<td>
+										<a data-toggle="modal" data-target="#modal-customer" class="info-toggle info-toggle-customer" href="#" data-company="<?=$ticket->company?>" data-name="<?=$ticket->name?>" data-email="<?=$ticket->email?>" data-alt-email="<?=$ticket->alternative_email?>" data-phone="<?=$ticket->phone?>" data-role="<?=$ticket->role?>">
+											<?=$ticket->name?> 
+										</a>
+									</td>
+									<td>
+										<?=$ticket->name_company?>
+									</td>
+									<td><?=$ticket->name_product?></td>
+									<td>
+										<?php
+
+												if ($main == null){
+													echo "<b><i>Não atribuído</i></b>";
+												} else if($assigned != null) {
+													?>
+													<a data-toggle="collapse" href="#collapse-<?=$idx?>">
+														<strong><?=$main[0]->name?></strong>
+														<span class="caret"></span>
+													</a>
+													<br>
+													<?php
+												} else {
+													?>
+													<strong><?=$main[0]->name?></strong>
+													<?php
+												}
+
+												echo '<div class="collapse" id="collapse-' . $idx . '">';
+												foreach ($assigned as $assign) {
+													echo $assign->name . "<br>";
+												}
+												echo "</div>";
+												$idx++;
+											
+										?>
+									</td>
+									<td class="<?=$ticket->color?>">
+										<i class="fa fa-exclamation-circle"></i>&nbsp; <?=$ticket->desc_priority?> 
+									</td>
+									<td><?=$ticket->desc_status?></td>
+									<td><?=$ticket->created?></td>
+								</tr>
+								<?php
+							}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
 require 'modals/company-info-modal.php';
 require 'modals/customer-info-modal.php';
 require 'modals/reminder-modal.php';
@@ -280,11 +506,11 @@ require 'modals/reminder-modal.php';
     });
 
 	<?php
-	if ($show_popup == true){
-		?>
-		$("#modal-reminder").modal('show');
-		<?php 
-	}
+	// if ($show_popup == true){
+	// 	?>
+	// 	$("#modal-reminder").modal('show');
+	// 	<?php 
+	// }
 	?>
 
     $toggleInfoCustomer = $(".info-toggle-customer");

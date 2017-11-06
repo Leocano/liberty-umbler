@@ -11,6 +11,14 @@ $history_id = $_POST['id_ticket'];
 $id_timekeeping = $_POST['id-edit-timekeeping'];
 $description = $_POST['txt-desc'];
 
+$date = $_POST['txt-date'];
+
+$date = str_replace("/","-",$date);
+$date = strtotime($date);
+$date = date('Y-m-d', $date);
+
+$date = $date . " 00:00:00";
+
 $dao = new TimekeepingDAO;
 
 if (Validator::isEmpty(array($description))){
@@ -27,12 +35,13 @@ $db->query(
         tb_product_timekeeping
     SET
         desc_timekeeping = ?
-    ,   date_timekeeping = CURRENT_TIMESTAMP
+    ,   date_timekeeping = ?
     WHERE
         id_timekeeping = ?
     ",
     array(
         $description
+    ,   $date
     ,   $id_timekeeping
     )
 );

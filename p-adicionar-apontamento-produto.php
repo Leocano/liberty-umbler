@@ -12,6 +12,13 @@ if ($_POST['status'] == 2){
 $id_user = $_POST['id-user'];
 $id_ticket = $_POST['id-ticket'];
 $description = $_POST['txt-desc'];
+$date = $_POST['txt-date'];
+
+$date = str_replace("/","-",$date);
+$date = strtotime($date);
+$date = date('Y-m-d', $date);
+
+$date = $date . " 00:00:00";
 
 if (Validator::isEmpty(array($id_ticket, $description))){
 	echo "Preencha todos os campos";
@@ -31,13 +38,14 @@ $db->query(
     ,   ?
     ,   ?
     ,   ?
-    ,   CURRENT_TIMESTAMP
+    ,   ?
     )
     ",
     array(
         $id_ticket
     ,   $id_user
     ,   $description
+    ,   $date
     )
 );
 
