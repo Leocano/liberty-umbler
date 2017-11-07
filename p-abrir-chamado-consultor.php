@@ -4,8 +4,8 @@
 
 require 'core/initializer.php';
 
-$token = $_POST['token'];
-Token::validateToken($token);
+// $token = $_POST['token'];
+// Token::validateToken($token);
 
 $module = $_POST['slt-module'];
 $priority = $_POST['slt-priority'];

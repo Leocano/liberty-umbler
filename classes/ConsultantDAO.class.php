@@ -11,6 +11,7 @@ class ConsultantDAO extends UserDAO{
 		$this->setUserData($user, $consultantData);
 		$user->setCode($consultantData[0]->code);
 		$user->setCost($consultantData[0]->cost);
+		$user->setContract($consultantData[0]->id_contract);
 	}
 
 	public function createNewConsultant($consultant, $area){

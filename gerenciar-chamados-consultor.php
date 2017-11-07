@@ -610,11 +610,11 @@ require 'modals/reminder-modal.php';
     });
 
 	<?php
-	// if ($show_popup == true){
-	// 	?>
-	// 	$("#modal-reminder").modal('show');
-	// 	<?php 
-	// }
+	if ($show_popup == true){
+		?>
+		$("#modal-reminder").modal('show');
+		<?php 
+	}
 	?>
 
     $toggleInfoCustomer = $(".info-toggle-customer");

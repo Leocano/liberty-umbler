@@ -456,7 +456,7 @@ $timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
 							<div class="col-sm-6 text-right">
 								<?php
 										$dao = new ConsultantDAO;
-										$consultants = $dao->getUsersByTicket($id_ticket);
+										$consultants = $dao->getUsersByProductTicket($id_ticket);
 										if (($consultants == null || $is_assigned != true) && !$user->checkProfile(array(2,3))){
 											$no_consultant = "disabled";
 										}
@@ -468,9 +468,9 @@ $timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
 							</div>
 						</div>
 						<?php 
-								$dao = new TimekeepingDAO;
-								$timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
-							?>
+							$dao = new TimekeepingDAO;
+							$timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
+						?>
 
 						<div class="table-responsive">
 							<table class="table table-condensed table-striped table-hover">
@@ -479,10 +479,10 @@ $timekeeping = $dao->getTimekeepingByProductTicketId($id_ticket);
 									<th>Representante</th>
 									<th>Descrição</th>
 									<?php 
-											if (!$user->checkProfile(array(5))){
-												echo "<th class='text-right'></th>";
-											}
-										?>
+										if (!$user->checkProfile(array(5))){
+											echo "<th class='text-right'></th>";
+										}
+									?>
 								</thead>
 								<tbody>
 									<?php 

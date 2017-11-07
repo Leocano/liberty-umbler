@@ -259,6 +259,7 @@ $("#btn-submit").click(function(event){
 	  		url : 'p-abrir-chamado-consultor.php' ,
 	  		type : 'POST',
 	  		success : function(json_status){
+				  console.log(status);
 	  			var status = $.parseJSON(json_status);
 	  			// alert(json_status);
 	  			if (status[0] == "success"){
@@ -392,9 +393,6 @@ $("#file-div").on("click", ".delete-attachment", function(){
 	$current = $(this);
 	$id = $("#id-user").val();
 	$name = $(this).data("file");
-
-	// console.log($id);
-	// console.log($name);
 
 	$("#form-abrir-chamado").ajaxSubmit({
 		url : 'p-deletar-anexo-temp.php?id=' + $id + '&attachment=' + $name ,
