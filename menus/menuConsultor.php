@@ -8,11 +8,11 @@
 </li> -->
 
 <?php
-    $user = $_SESSION['user'];
-    $dao = new UserDAO;
-    $id = $dao->getUserAreaId($user->getIdUser());
+    // $user = $_SESSION['user'];
+    // $dao = new UserDAO;
+    // $id = $dao->getUserAreaId($user->getIdUser());
 
-    if ($id[0]->area_user == 5){
+    // if ($id[0]->area_user == 5){
 ?>
 
 <li class="dropdown">
@@ -26,7 +26,7 @@
 </li>
 
 <?php
-}
+// }
 ?>
 
 <li class="dropdown">
