@@ -90,4 +90,28 @@ class AttachmentDAO{
 
 		return $db->getResults();
 	}
+	
+	public function deleteProductAttachment($id){
+		$db = Database::getInstance();
+
+		$db->query("SELECT *
+					FROM 
+						tb_products_attachments 
+					WHERE 
+						id_attachment = ?"
+						,
+						array($id)
+						);
+
+		$attachment = $db->getResults();
+		unlink($attachment[0]->path_attachment);
+
+		$db->query("DELETE FROM 
+						tb_products_attachments
+					WHERE
+						id_attachment = ?"
+						,
+						array($id)
+						);
+	}
 }
