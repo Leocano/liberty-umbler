@@ -865,12 +865,17 @@ require 'scripts/jquery-ui.php';
 			$("#txt-desc").val(desc.replace(/\//g, "&#47;"));
 			$formTimekeep.ajaxSubmit({
 				url: 'p-adicionar-apontamento-produto.php',
+				data: {
+					id_creator: <?=$id_creator?>
+				,	subject: "<?=$subject?>"
+				},
 				type: 'POST',
 				success: function (status) {
 					if (status == "success") {
 						location.href = "visualizar-chamado-produto.php?id=" + <?=$id_ticket?> + "&timekeeping=true";
 					} else {
 						alert(status);
+						// console.log(status);
 					}
 				}
 			});

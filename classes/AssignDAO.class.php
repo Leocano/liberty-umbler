@@ -325,7 +325,7 @@ class AssignDAO{
 		return $db->getResults();
 	}
 	
-	public function getEmailsByUserIdProduct($id_user = array()){
+	public function getEmailsByUserIdProduct($id_user = array(), $id_ticket){
 		$db = Database::getInstance();
 
 		$id_user = implode(",", $id_user);
@@ -342,8 +342,53 @@ class AssignDAO{
 						assi.sent = 0
 					AND
 						assi.id_user = user.id_user
+					AND
+						assi.id_ticket = " . $id_ticket . "
 					"
 					);
+		return $db->getResults();
+	}
+
+	public function getEmailsByUserIdProductTimekeeping($id_user = array(), $id_ticket){
+		$db = Database::getInstance();
+
+		$id_user = implode(",", $id_user);
+
+		$db->query("SELECT
+						user.name
+					,	user.email
+					FROM
+						tb_users 		user
+					,	tb_product_assignments	assi
+					WHERE
+						user.id_user IN (" . $id_user . ")
+					AND
+						assi.id_user = user.id_user
+					AND
+						assi.id_ticket = " . $id_ticket . "
+					"
+					);
+		return $db->getResults();
+	}
+	
+	public function getCreatorId($id_user) {
+		$db = Database::getInstance();
+
+		$db->query(
+			"
+			SELECT
+				email
+			,	name
+			FROM
+				tb_users
+			WHERE
+				id_user = ?
+			",
+			array(
+				$id_user
+			)
+		);
+
 		return $db->getResults();
 	}
 

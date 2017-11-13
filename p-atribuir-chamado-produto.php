@@ -59,12 +59,12 @@ $dao->assignMainConsultantProduct($id_ticket, $id_main);
 
 if (isset($id_user)){
 	array_push($id_user, $id_main);
-	$user_emails = $dao->getEmailsByUserIdProduct($id_user);
+	$user_emails = $dao->getEmailsByUserIdProduct($id_user, $id_ticket);
 	$dao->updateSent($id_user);
 } else {
 	$main_array = array();
 	array_push($main_array, $id_main);
-	$user_emails = $dao->getEmailsByUserIdProduct($main_array);
+	$user_emails = $dao->getEmailsByUserIdProduct($main_array, $id_ticket);
 	$dao->updateSent($main_array);
 }
 

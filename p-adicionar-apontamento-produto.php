@@ -13,6 +13,9 @@ $id_user = $_POST['id-user'];
 $id_ticket = $_POST['id-ticket'];
 $description = $_POST['txt-desc'];
 $date = $_POST['txt-date'];
+$id_creator = $_POST['id_creator'];
+$subject = $_POST['subject'];
+$name_email = $user->getName();
 
 $date = str_replace("/","-",$date);
 $date = strtotime($date);
@@ -48,6 +51,26 @@ $db->query(
     ,   $date
     )
 );
+
+$dao = new AssignDAO;
+
+if ($id_user == $id_creator) {
+    $assigned = $dao->getAssignedByTicketProduct($id_ticket);
+    $main_consultant = $dao->getMainConsultantProduct($id_ticket);
+    $users_to_send = array();
+    foreach($assigned as $assi_user) {
+        array_push($users_to_send, $assi_user->id_user);
+    }
+    array_push($users_to_send, $main_consultant[0]->id_user);
+    
+    $user_emails = $dao->getEmailsByUserIdProductTimekeeping($users_to_send, $id_ticket);
+} else {
+    $user_emails = $dao->getCreatorId($id_creator);
+}
+
+// var_dump($user_emails);
+// exit();
+include 'mail/mail-apontamento-produtos.php';
 
 $id_user = $_SESSION['user']->getIdUser();
 $dao = new HistoryDAO;

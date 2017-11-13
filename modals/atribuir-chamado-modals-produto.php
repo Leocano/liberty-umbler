@@ -12,7 +12,7 @@
 							<label>Principal</label>
 							<?php 
 								$dao = new ConsultantDAO;
-								$consultants = $dao->getProductConsultants();
+								$consultants = $dao->getAllConsultants();
 
 								if($main_consultant == null){
 									$data_title = "data-title='Escolha um consultor'";
