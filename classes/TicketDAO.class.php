@@ -1215,11 +1215,11 @@ class TicketDAO{
 					AND
 						tick.id_status != 2
 					AND
-						assi.id_user = user.id_user
+						tick.id_creator = user.id_user
 					AND
 						assi.id_ticket = tick.id_ticket
 					AND
-						user.id_user = ?
+						assi.id_user = ?
 					ORDER BY
 						id_ticket DESC",
 						array(
@@ -1267,6 +1267,41 @@ class TicketDAO{
 						array(
 							$id_user
 						)
+					);
+
+		return $db->getResults();
+	}
+
+	public function getAllProductTickets(){
+		$db = Database::getInstance();
+
+		$db->query("SELECT
+						tick.*
+					,	REPLACE(DATE_FORMAT(tick.creation_date, '%d/%m/%Y às %T'), '-', '/') as created
+					,	user.*
+					,	prio.*
+					,	stat.*
+					,	prod.*
+					,	comp.*
+					FROM
+						tb_product_tickets		tick
+					,	tb_users				user
+					,	tb_priority				prio
+					,	tb_status				stat
+					,	tb_product_companies	comp
+					,	tb_products				prod
+					WHERE
+						tick.id_creator = user.id_user
+					AND
+						tick.id_priority = prio.id_priority
+					AND
+						tick.id_status = stat.id_status
+					AND 
+						tick.id_company = comp.id_company
+					AND
+						prod.id_product = tick.id_product
+					ORDER BY
+						id_ticket DESC"
 					);
 
 		return $db->getResults();
