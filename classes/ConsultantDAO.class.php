@@ -75,6 +75,31 @@ class ConsultantDAO extends UserDAO{
 
 		return $consultants;
 	}
+
+	public function getAllActiveConsultants(){
+		$db = Database::getInstance();
+
+		$db->query("SELECT 
+						user.id_user
+					,	user.name
+					,	user.email
+					,	user.active
+					,	user.role
+					,	prof.desc_profile
+					FROM
+						tb_users					user
+					,	tb_profiles					prof
+					WHERE
+						id_user_type = 1
+					AND
+						user.id_profile = prof.id_profile
+					AND
+						user.active = 1
+					");
+		$consultants = $db->getResults();
+
+		return $consultants;
+	}
 	
 		public function getProductConsultants(){
 			$db = Database::getInstance();
