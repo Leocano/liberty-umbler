@@ -3,10 +3,10 @@
 //Vetor com as configurações basicas do sistema
 $GLOBALS['config'] = array(
 	'mysql' => array(
-		'host' => 'letnis_qas.mysql.dbaas.com.br',
-		'username' => 'letnis_qas',
-		'password' => 'Letnis@*qas_',
-		'db' => 'letnis_qas'
+		'host' => 'mysql762.umbler.com',
+		'username' => 'letnis',
+		'password' => '_UL44daw8r,_W',
+		'db' => 'liberty_qas'
 	)
 );
 
